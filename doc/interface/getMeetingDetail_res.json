@@ -1,0 +1,35 @@
+{
+  "header": {
+  },
+  "payload": {
+    "meetingDetail": {
+      "id": "",
+      "subject": "",
+      "description": "",
+      "price": "",
+      "createTime": "",
+      "updateTime": "",
+      "calender": [
+        {
+          "id": "",
+          "fromTime": "",
+          "toTime": "",
+          "frequency": ""
+        }
+      ],
+      "location": [
+        {
+          "id": "",
+          "address": ""
+        }
+      ]
+    },
+    "userSummary": {
+      "id": "",
+      "name": "",
+      "title": "",
+      "icon": "",
+      "rating": ""
+    }
+  }
+}

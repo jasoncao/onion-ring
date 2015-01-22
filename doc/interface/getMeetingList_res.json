@@ -1,0 +1,28 @@
+{
+  "header": {
+  },
+  "payload": {
+    "paging": {
+      "toIndex": ""
+    },
+    "meetingList": [
+      {
+        "meetingSummary": {
+          "id": "",
+          "subject": "",
+          "description": "",
+          "price": "",
+          "createTime": "",
+          "updateTime": ""
+        },
+        "userSummary": {
+          "id": "",
+          "name": "",
+          "title": "",
+          "icon": "",
+          "rating": ""
+        }
+      }
+    ]
+  }
+}

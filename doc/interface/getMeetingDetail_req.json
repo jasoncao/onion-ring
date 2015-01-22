@@ -1,0 +1,9 @@
+{
+  "header": {
+  },
+  "payload": {
+    "myUserId": 777,
+    "cityId": 1,
+    "meetingId": ""
+  }
+}

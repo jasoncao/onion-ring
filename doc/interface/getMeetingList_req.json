@@ -2,11 +2,11 @@
   "header": {
   },
   "payload": {
-    "myUserId": 777,
+    "uid": 777,
     "cityId": 1,
     "paging": {
-      "fromIndex": "",
-      "offset": ""
+      "offset": "",
+      "limit": ""
     }
   }
 }

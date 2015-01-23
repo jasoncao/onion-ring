@@ -3,7 +3,7 @@
   },
   "payload": {
     "paging": {
-      "toIndex": ""
+      "offset": ""
     },
     "meetingList": [
       {

@@ -1,0 +1,19 @@
+<ion-view view-title="">
+  <ion-content class="padding">
+
+    <div>
+      <h4>{{meeting.subject}}</h4>
+
+      <p><img ng-src="{{meeting.sellerUser.icon}}" style="width: 16px; height: 16px"> {{meeting.sellerUser.name}} ({{meeting.sellerUser.title}})</p>
+
+      <p>{{meeting.desc}}</p>
+
+      <p>价钱：${{meeting.price}}</p>
+
+      <p>时间：{{meeting.calender[0].fromTime}} - {{meeting.calender[0].toTime}} on {{meeting.calender[0].frequency}}</p>
+
+      <p>地点：{{meeting.location[0].address}}</p>
+    </div>
+
+  </ion-content>
+</ion-view>

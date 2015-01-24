@@ -2,10 +2,10 @@
   "header": {
   },
   "payload": {
-    "meetingDetail": {
+    "meeting": {
       "id": "",
       "subject": "",
-      "description": "",
+      "desc": "",
       "price": "",
       "createTime": "",
       "updateTime": "",
@@ -22,14 +22,14 @@
           "id": "",
           "address": ""
         }
-      ]
-    },
-    "userSummary": {
-      "id": "",
-      "name": "",
-      "title": "",
-      "icon": "",
-      "rating": ""
+      ],
+      "sellerUser": {
+        "id": "",
+        "name": "",
+        "title": "",
+        "icon": "",
+        "rating": ""
+      }
     }
   }
 }

@@ -1,0 +1,19 @@
+<ion-view view-title="">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item" ng-repeat="meeting in meetings" type="item-text-wrap" href="#/tab/meetings/{{meeting.id}}">
+
+        <div>
+          <h2>{{meeting.subject}}</h2>
+
+          <p><img ng-src="{{meeting.sellerUser.icon}}" style="width: 16px; height: 16px"> {{meeting.sellerUser.name}} ({{meeting.sellerUser.title}})</p>
+
+          <p>{{meeting.desc}})</p>
+
+          <p>$ {{meeting.price}}</p>
+        </div>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

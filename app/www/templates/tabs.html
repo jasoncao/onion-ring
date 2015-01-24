@@ -5,12 +5,15 @@ navigation history that also transitions its views in and out.
 -->
 <ion-tabs class="tabs-icon-top tabs-color-active-positive">
 
+  <!-- Meetings Tab -->
+  <ion-tab title="约饭" icon-off="ion-ios7-cloudy-night-outline" icon-on="ion-ios7-cloudy-night" href="#/tab/meetings">
+    <ion-nav-view name="tab-meeting"></ion-nav-view>
+  </ion-tab>
 
   <!-- Dashboard Tab -->
   <ion-tab title="Status" icon-off="ion-ios7-pulse" icon-on="ion-ios7-pulse-strong" href="#/tab/dash">
     <ion-nav-view name="tab-dash"></ion-nav-view>
   </ion-tab>
-
 
   <!-- Chats Tab -->
   <ion-tab title="Chats" icon-off="ion-ios7-chatboxes-outline" icon-on="ion-ios7-chatboxes" href="#/tab/chats">
@@ -22,11 +25,9 @@ navigation history that also transitions its views in and out.
     <ion-nav-view name="tab-friends"></ion-nav-view>
   </ion-tab>
 
-
   <!-- Account Tab -->
   <ion-tab title="Account" icon-off="ion-ios7-gear-outline" icon-on="ion-ios7-gear" href="#/tab/account">
     <ion-nav-view name="tab-account"></ion-nav-view>
   </ion-tab>
-
 
 </ion-tabs>

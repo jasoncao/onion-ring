@@ -1,0 +1,26 @@
+{
+  "header": {
+  },
+  "payload": {
+    "paging": {
+      "offset": ""
+    },
+    "meetings": [
+      {
+        "id": "",
+        "subject": "",
+        "desc": "",
+        "price": "",
+        "createTime": "",
+        "updateTime": "",
+        "sellerUser": {
+          "id": "",
+          "name": "",
+          "title": "",
+          "icon": "",
+          "rating": ""
+        }
+      }
+    ]
+  }
+}

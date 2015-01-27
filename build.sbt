@@ -11,13 +11,16 @@ libraryDependencies ++= List(
   Library.akkaSse,
   Library.logbackClassic,
   Library.sprayJson,
+  Library.reactiveMongo,
   Library.akkaTestkit % "test",
-  Library.scalaTest   % "test"
+  Library.scalaTest % "test"
 )
 
 resolvers ++= List(
   Resolver.hseeberger,
-  Resolver.patriknw
+  Resolver.patriknw,
+  Resolver.sonatype,
+  Resolver.typesafe
 )
 
 initialCommands := """|import de.heikoseeberger.reactiveflows._""".stripMargin

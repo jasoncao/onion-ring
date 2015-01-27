@@ -2,16 +2,16 @@ package com.onion.mongo
 
 import com.onion.core._
 import com.onion.core.Implicits._
-import com.onion.core.models.{DAO, Model}
+import com.onion.core.models.{ DAO, Model }
 import reactivemongo.api._
 import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.api.commands.WriteResult
 import reactivemongo.bson._
-import reactivemongo.core.commands.{Count, LastError}
+import reactivemongo.core.commands.{ Count, LastError }
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 case class Sort(fieldName: String, direction: Sort.SortDirection)
 object Sort {

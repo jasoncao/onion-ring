@@ -1,4 +1,4 @@
-package sprest.util
+package com.onion.core.util
 
 package enum {
 

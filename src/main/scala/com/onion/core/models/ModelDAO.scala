@@ -1,8 +1,6 @@
 package com.onion.core.models
 
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
-import com.onion.core.security.Session
+import scala.concurrent.{ExecutionContext, Future}
 
 trait UniqueSelector[M <: Model[ID], ID] {
   def id: ID

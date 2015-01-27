@@ -1,9 +1,9 @@
 package com.onion.mongo
 
 import spray.json._
-import sprest.Formats._
-import scala.collection.mutable
+
 import scala.languageFeature.implicitConversions
+import com.onion.core.Formats._
 
 object QueryDSL {
 
@@ -36,7 +36,7 @@ object QueryDSL {
   // Array Comparisons
   private[this] def arrayComparison[V](operator: String, fieldNameToArray: (String, List[V]))(implicit jsWriter: JsonWriter[V]) =
     fieldNameToArray._1 -> JsObject(
-      operator -> JsArray(fieldNameToArray._2.map(jsWriter.write(_)))
+      operator -> JsArray(fieldNameToArray._2.map(jsWriter.write(_)):_*)
     )
 
   def $all[V](fieldNameToArray: (String, List[V]))(implicit jsWriter: JsonWriter[V]): JsField = arrayComparison("$all", fieldNameToArray)
@@ -48,7 +48,7 @@ object QueryDSL {
 
   // Logical
   private[this] def logicalSequence(operator: String, expressions: List[JsObject]): JsField =
-    operator -> JsArray(expressions)
+    operator -> JsArray(expressions:_*)
 
   def $or(expressions: List[JsField]): JsField = logicalSequence("$or", expressions)
   def $nor(expressions: List[JsField]): JsField = logicalSequence("$nor", expressions)
@@ -66,7 +66,7 @@ object QueryDSL {
 
   def $rename(oldToNew: (String, String)*): JsField =
     "$rename" -> JsObject(
-      oldToNew.map(tup => tup._1 -> tup._2.toJson).toList
+      oldToNew.map(tup => tup._1 -> tup._2.toJson).toList:_*
     )
 
   def $inc(fieldNameToAmount: (String, Int)): JsField =

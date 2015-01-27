@@ -1,8 +1,7 @@
 package com.onion.mongo
 
-import spray.json._
 import reactivemongo.bson._
-import sprest.reactivemongo.typemappers.{ BSONTypeMapper, SprayJsonTypeMapper }
+import spray.json._
 
 /**
  * Provides helpers for generating BSONReader / BSONWriter objects

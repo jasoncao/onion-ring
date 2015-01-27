@@ -1,23 +1,17 @@
 package com.onion.mongo
 
-import reactivemongo.api.collections.default.BSONCollection
-import reactivemongo.core.commands.Command
-import reactivemongo.core.commands.Count
-import reactivemongo.core.commands.LastError
-import sprest.Implicits._
-import sprest.Logging
-import sprest.models._
-import sprest.security.Session
-import sprest.reactivemongo.typemappers._
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
-import play.api.libs.iteratee.Iteratee
+import com.onion.core._
+import com.onion.core.Implicits._
+import com.onion.core.models.{DAO, Model}
 import reactivemongo.api._
+import reactivemongo.api.collections.bson.BSONCollection
+import reactivemongo.api.commands.WriteResult
 import reactivemongo.bson._
-import reactivemongo.bson.{ BSONReader, BSONWriter }
-import reactivemongo.bson.DefaultBSONHandlers._
-import spray.json._
+import reactivemongo.core.commands.{Count, LastError}
 import spray.json.DefaultJsonProtocol._
+import spray.json._
+
+import scala.concurrent.{ExecutionContext, Future}
 
 case class Sort(fieldName: String, direction: Sort.SortDirection)
 object Sort {
@@ -128,7 +122,7 @@ trait ReactiveMongoPersistence {
      * Deletes all models that match the query
      * @param query
      */
-    def deleteWhere(query: JsObject)(implicit ec: ExecutionContext): Future[LastError] = collection.remove(query)
+    def deleteWhere(query: JsObject)(implicit ec: ExecutionContext): Future[WriteResult] = collection.remove(query)
 
     /**
      * Insert the raw JSON into the collection.
@@ -136,7 +130,7 @@ trait ReactiveMongoPersistence {
      * a model object because the underlying JSON has not yet been fully
      * migrated (fields added / changed / removed)
      */
-    def insertRaw(obj: JsObject)(implicit ec: ExecutionContext): Future[LastError] =
+    def insertRaw(obj: JsObject)(implicit ec: ExecutionContext): Future[WriteResult] =
       collection.insert(jsonMapper.toBSON(obj).asInstanceOf[BSONDocument])
 
     /**
@@ -144,7 +138,7 @@ trait ReactiveMongoPersistence {
      * @param query   mongodb query object
      * @param fields  fields to update with new values (or to remove)
      */
-    def updateWhere(query: JsObject, fields: JsObject)(implicit ec: ExecutionContext): Future[LastError] =
+    def updateWhere(query: JsObject, fields: JsObject)(implicit ec: ExecutionContext): Future[WriteResult] =
       collection.update(query, JsObject("$set" -> fields), multi = true)
 
     /**
@@ -153,7 +147,7 @@ trait ReactiveMongoPersistence {
      *   renamed via the dot notation, e.g. Map('foo.bar' -> 'foo.baz')
      * @param query   mongodb query object, defaults to all
      */
-    def renameFields(newNames: Map[String, String], query: JsObject = JsObject())(implicit ec: ExecutionContext): Future[LastError] = {
+    def renameFields(newNames: Map[String, String], query: JsObject = JsObject())(implicit ec: ExecutionContext): Future[WriteResult] = {
       val rename = JsObject(newNames.mapValues(_.toJson))
       collection.update(query, JsObject("$rename" -> rename), multi = true)
     }

@@ -1,9 +1,10 @@
 package com.onion.mongo
 
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
 import com.onion.core.models.{UniqueSelector, Model}
-import com.onion.models.Meeting
+import com.onion.models.{User, Meeting}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json.RootJsonFormat
@@ -34,12 +35,16 @@ object DB extends ReactiveMongoPersistence {
     override def remove(selector: Selector)(implicit ec: ExecutionContext) = uncheckedRemoveById(selector.id)
   }
 
-  def newGuid = java.util.UUID.randomUUID.toString
+//  def newGuid = java.util.UUID.randomUUID.toString
 
-  private val generateSeqId = new AtomicLong(0L)
+  private val seqIdMap = new ConcurrentHashMap[String,AtomicLong]
 
-  def sequenceId = generateSeqId.getAndIncrement
+  def sequenceId(`type` : String) = {
+    seqIdMap.putIfAbsent(`type`,new AtomicLong(0))
+    seqIdMap.get(`type`).getAndIncrement
+  }
 
-  object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = sequenceId.toString))
+  object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = sequenceId("meeting").toString))
 
+  object UserDao extends UnsecuredDAO[User]("user")(_.copy(id = sequenceId("user").toString))
 }

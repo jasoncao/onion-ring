@@ -2,7 +2,7 @@ package com.onion.core.security
 
 import java.security.{ SecureRandom, MessageDigest }
 import spray.json.DefaultJsonProtocol
-import sprest.util.enum._
+import com.onion.core.util.enum._
 
 case class EncryptedPassword(salt: String, encryptedPass: String) {
   def saltBytes = Hex.toBytes(salt)

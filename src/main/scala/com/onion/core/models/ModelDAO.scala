@@ -1,6 +1,6 @@
 package com.onion.core.models
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ ExecutionContext, Future }
 
 trait UniqueSelector[M <: Model[ID], ID] {
   def id: ID
@@ -41,15 +41,17 @@ trait DAO[M <: Model[ID], ID] {
 
   def findById(id: ID)(implicit ec: ExecutionContext): Future[Option[M]] = fetchOne(findBySelector(generateSelector(id)))
 
-  /** Peforms post-fetch processing on returned result
-    */
+  /**
+   * Peforms post-fetch processing on returned result
+   */
   protected def fetchOne(f: => Future[Option[M]])(implicit ec: ExecutionContext): Future[Option[M]] = f flatMap {
     case Some(m) => postFetch(m) map { Option(_) }
-    case None => Future.successful(None)
+    case None    => Future.successful(None)
   }
 
-  /** Peforms post-fetch processing on returned results
-    */
+  /**
+   * Peforms post-fetch processing on returned results
+   */
   protected def fetchMany(f: => Future[Iterable[M]])(implicit ec: ExecutionContext): Future[Iterable[M]] = f flatMap { ms =>
     Future.traverse(ms)(postFetch)
   }
@@ -85,7 +87,7 @@ trait MutableListDAO[M <: Model[ID], ID] extends DAO[M, ID] {
   override def remove(selector: Selector)(implicit ec: ExecutionContext) {
     findBySelector(selector).onSuccess {
       case Some(found) => _all -= found
-      case None => // do nothing
+      case None        => // do nothing
     }
   }
 

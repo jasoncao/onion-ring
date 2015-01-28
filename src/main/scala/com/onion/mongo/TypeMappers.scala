@@ -16,7 +16,7 @@ object BSONTypeMapper {
 
     def fromBSON(v: BSONValue) = v match {
       case BSONString(str) => str
-      case _ => throw new Exception(s"Unexpected BSON value for deserialization")
+      case _               => throw new Exception(s"Unexpected BSON value for deserialization")
     }
   }
 
@@ -25,7 +25,7 @@ object BSONTypeMapper {
 
     def fromBSON(v: BSONValue) = v match {
       case BSONLong(l) => l
-      case _ => throw new Exception(s"Unexpected BSON value for deserialization")
+      case _           => throw new Exception(s"Unexpected BSON value for deserialization")
     }
   }
 
@@ -64,24 +64,24 @@ trait SprayJsonTypeMapper extends BSONTypeMapper[JsValue] {
       if (num.isValidInt) BSONInteger(num.intValue)
       else if (num.isValidLong) BSONLong(num.longValue)
       else BSONDouble(num.doubleValue)
-    case JsFalse => BSONBoolean(false)
-    case JsTrue => BSONBoolean(true)
-    case JsNull => BSONNull
-    case JsArray(elems) => BSONArray(elems.map(toBSON))
+    case JsFalse          => BSONBoolean(false)
+    case JsTrue           => BSONBoolean(true)
+    case JsNull           => BSONNull
+    case JsArray(elems)   => BSONArray(elems.map(toBSON))
     case JsObject(fields) => BSONDocument(fields.toList.map(entry => transformForBSON(entry._1) -> toBSON(entry._2)))
   }
 
   def fromBSON(bson: BSONValue): JsValue = bson match {
-    case BSONString(value) => JsString(value)
-    case BSONDouble(value) => JsNumber(value)
+    case BSONString(value)  => JsString(value)
+    case BSONDouble(value)  => JsNumber(value)
     case BSONInteger(value) => JsNumber(value)
-    case BSONLong(value) => JsNumber(value)
+    case BSONLong(value)    => JsNumber(value)
     case BSONBoolean(value) => JsBoolean(value)
-    case BSONNull => JsNull
-    case arr: BSONArray => JsArray(arr.values.map(fromBSON).toList: _*)
+    case BSONNull           => JsNull
+    case arr: BSONArray     => JsArray(arr.values.map(fromBSON).toList: _*)
     case bsonDoc: BSONDocument => JsObject((bsonDoc.elements.toList.map {
       elem => (transformFromBSON(elem._1), fromBSON(elem._2))
-    }):_*)
+    }): _*)
   }
 }
 

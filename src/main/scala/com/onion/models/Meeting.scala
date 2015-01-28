@@ -7,19 +7,6 @@ import com.onion.core.Formats._
 /**
  * Created by famo on 1/27/15.
  */
-case class Meeting(id: Long,
-                   userId: String,
-                   subject: String,
-                   description: String,
-                   targetUser: String,
-                   price: Double,
-                   createTime: Long,
-                   updateTime: Long) extends Model[Long]
-
-object Meeting {
-  implicit val reminderJsonFormat = jsonFormat8(apply)
-}
-
 
 sealed abstract class RegularType(val id: String, val label: String) extends Enum[RegularType](id)
 
@@ -55,4 +42,19 @@ case class Location(name: String,
 
 object Location {
   implicit val reminderJsonFormat = jsonFormat5(apply)
+}
+
+case class Meeting(id: String,
+                   userId: String,
+                   subject: String,
+                   description: String,
+                   targetUser: String,
+                   price: Double,
+                   calender: Calender,
+                   location: Location,
+                   createTime: Long,
+                   updateTime: Long) extends Model[String]
+
+object Meeting {
+  implicit val reminderJsonFormat = jsonFormat10(apply)
 }

@@ -7,7 +7,7 @@ import reactivemongo.api._
 import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.api.commands.WriteResult
 import reactivemongo.bson._
-import reactivemongo.core.commands.{Count, LastError}
+import reactivemongo.core.commands.Count
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 

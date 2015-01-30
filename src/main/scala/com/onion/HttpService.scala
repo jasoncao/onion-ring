@@ -7,6 +7,7 @@ import akka.stream.scaladsl.ImplicitFlowMaterializer
 import akka.util.Timeout
 import com.onion.core.util.SprayJsonMarshalling
 import com.onion.view.ViewObject._
+import com.onion.view.ViewController._
 import spray.json._
 
 import scala.concurrent.duration._
@@ -79,7 +80,7 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
       path("meetings" / Segment) {
         meetingId => get {
           complete {
-            getMeetingDetaillFromDB(meetingId)
+            getMeetingDetailFromDB(meetingId)
           }
         }
       } ~

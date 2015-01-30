@@ -1,8 +1,10 @@
 package com.onion.view
 
-import akka.http.marshalling.ToResponseMarshallable
 import com.onion.model._
+import com.onion.mongo.DB.UserDao
 import spray.json.DefaultJsonProtocol
+
+import scala.concurrent.Future
 
 /**
  * Created by jincao on 1/30/15.
@@ -26,16 +28,24 @@ object ViewObject {
     }
   }
 
-  case class MeetingAbsResponse(meetingAbsList: Array[MeetingAbstraction])
+  case class MeetingAbsResponse(meetingAbsList: Iterable[MeetingAbstraction])
 
   object MeetingAbsResponse extends DefaultJsonProtocol {
     implicit val format = jsonFormat1(apply)
+
+    def fromModels(meetingsFuture: Future[Iterable[Meeting]]): Future[MeetingAbsResponse] = {
+      val result = for {
+        meetings <- meetingsFuture
+        meeting <- meetings
+        userOpt <- UserDao.findById(meeting.userId)
+        user <- userOpt
+      }
+      yield {
+        MeetingAbstraction
+          .fromModel(meeting, user)
+      }
+      result.flatMap(MeetingAbsResponse(_))
+    }
   }
-
-  def getMeetingsFromDB(cityId: Option[String]): ToResponseMarshallable = ???
-
-  def getMeetingDetaillFromDB(id: String): ToResponseMarshallable = ???
-
-  def addMeetingToDB(meeting: Meeting): ToResponseMarshallable = ???
 
 }

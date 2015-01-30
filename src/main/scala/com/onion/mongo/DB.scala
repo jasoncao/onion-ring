@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
 import com.onion.core.models.{UniqueSelector, Model}
-import com.onion.models.{User, Meeting}
+import com.onion.model.{User, Meeting}
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json.RootJsonFormat

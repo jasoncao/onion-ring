@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.onion.util
+package com.onion.core.util
 
-import akka.http.marshalling.{ PredefinedToEntityMarshallers, ToEntityMarshaller => TEM }
-import akka.http.model.{ ContentTypeRange, MediaRange, MediaTypes }
+import akka.http.marshalling.{PredefinedToEntityMarshallers, ToEntityMarshaller => TEM}
+import akka.http.model.{ContentTypeRange, MediaRange, MediaTypes}
 import akka.http.unmarshalling.Unmarshaller.UnsupportedContentTypeException
-import akka.http.unmarshalling.{ FromEntityUnmarshaller => FEUM, PredefinedFromEntityUnmarshallers }
+import akka.http.unmarshalling.{FromEntityUnmarshaller => FEUM, PredefinedFromEntityUnmarshallers}
 import akka.http.util.FastFuture
 import akka.stream.FlowMaterializer
-import spray.json.{ JsonParser, JsonPrinter, PrettyPrinter, RootJsonReader, RootJsonWriter }
+import spray.json.{JsonParser, JsonPrinter, PrettyPrinter, RootJsonReader, RootJsonWriter}
 
 import scala.concurrent.ExecutionContext
 

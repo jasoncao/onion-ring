@@ -1,6 +1,6 @@
 package com.onion.mongo
 
-import com.onion.models.{Gender, User}
+import com.onion.model.{Gender, User}
 import org.scalatest.FunSuite
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await

@@ -1,4 +1,4 @@
-package com.onion.models
+package com.onion.model
 
 import com.onion.core.models.Model
 import com.onion.core.util.enum._

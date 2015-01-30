@@ -1,6 +1,6 @@
 package com.onion.mongo
 
-import com.onion.models.{RegularType, Calender, Location, Meeting}
+import com.onion.model.{RegularType, Calender, Location, Meeting}
 import org.scalatest.FunSuite
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -17,7 +17,7 @@
 package com.onion.core.util
 
 import akka.actor.ActorSystem
-import akka.event.{Logging, LoggingAdapter}
+import akka.event.{ Logging, LoggingAdapter }
 
 import scala.collection.breakOut
 
@@ -33,8 +33,8 @@ object BaseApp {
   }
 }
 
-abstract class BaseApp[A] {
-  import  BaseApp._
+abstract class BaseApp {
+  import BaseApp._
   def main(args: Array[String]) {
     applySystemProperties(args)
     val system = ActorSystem("onion-ring")

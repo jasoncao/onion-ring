@@ -23,37 +23,41 @@ object RegularType extends EnumCompanion[RegularType] {
 }
 
 case class Calender(
-                     startTime: Long,
-                     duration: Long,
-                     regularType: RegularType = RegularType.OneDay,
-                     createTime: Long,
-                     updateTime: Long
-                     )
+  startTime:   Long,
+  duration:    Long,
+  regularType: RegularType = RegularType.OneDay,
+  createTime:  Long,
+  updateTime:  Long
+)
 
 object Calender {
   implicit val reminderJsonFormat = jsonFormat5(apply)
 }
 
-case class Location(name: String,
-                    gps: String,
-                    cityId: String,
-                    createTime: Long,
-                    updateTime: Long)
+case class Location(
+  name:       String,
+  gps:        String,
+  cityId:     String,
+  createTime: Long,
+  updateTime: Long
+)
 
 object Location {
   implicit val reminderJsonFormat = jsonFormat5(apply)
 }
 
-case class Meeting(id: String,
-                   userId: String,
-                   subject: String,
-                   description: String,
-                   targetUser: String,
-                   price: Double,
-                   calender: Calender,
-                   location: Location,
-                   createTime: Long,
-                   updateTime: Long) extends Model[String]
+case class Meeting(
+  id:          String,
+  userId:      String,
+  subject:     String,
+  description: String,
+  targetUser:  String,
+  price:       Double,
+  calender:    Calender,
+  location:    Location,
+  createTime:  Long,
+  updateTime:  Long
+) extends Model[String]
 
 object Meeting {
   implicit val reminderJsonFormat = jsonFormat10(apply)

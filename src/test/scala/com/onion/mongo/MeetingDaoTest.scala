@@ -13,9 +13,9 @@ class MeetingDaoTest extends FunSuite{
 
   val location = Location("haha_name","haha_gps","haha_city",123,123)
   val calender = Calender(123,123,RegularType.EveryDay,123,123)
-  val meeting = Meeting("haha_id","haha_user_id","haha_subject","haha_description","haha_target_user",12.34,calender,location,123,123)
+  val meeting = Meeting("haha_id","0","haha_subject","haha_description","haha_target_user",12.34,calender,location,123,123)
 
-  ignore("meeting dao test") {
+  test("meeting dao test") {
 
     val meetingDao = DB.MeetingDao
     val result = meetingDao.add(meeting)

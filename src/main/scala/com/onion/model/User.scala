@@ -22,20 +22,22 @@ object Gender extends EnumCompanion[Gender] {
   )
 }
 
-case class User(id: String,
-                cityId: String,
-                name: String,
-                password: String,
-                phone: String,
-                qq: String,
-                email: String,
-                photo: String,
-                gender: Gender = Gender.Male,
-                jobTitle: String,
-                description: String,
-                score: Int,
-                createTime: Long,
-                updateTime: Long) extends Model[String]
+case class User(
+  id:          String,
+  cityId:      String,
+  name:        String,
+  password:    String,
+  phone:       String,
+  qq:          String,
+  email:       String,
+  photo:       String,
+  gender:      Gender = Gender.Male,
+  jobTitle:    String,
+  description: String,
+  score:       Int,
+  createTime:  Long,
+  updateTime:  Long
+) extends Model[String]
 
 object User {
   implicit val reminderJsonFormat = jsonFormat14(apply)

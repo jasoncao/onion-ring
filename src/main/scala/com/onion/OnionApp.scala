@@ -20,7 +20,7 @@ import akka.actor.{ ActorRef, Actor, ActorLogging, ActorSystem, Props, Superviso
 import akka.event.LoggingAdapter
 import com.onion.core.util.BaseApp
 
-object OnionAppApp extends BaseApp[Unit] {
+object OnionAppApp extends BaseApp {
 
   override def run(system: ActorSystem, log: LoggingAdapter): Unit = {
     system.actorOf(Reaper.props, "reaper")

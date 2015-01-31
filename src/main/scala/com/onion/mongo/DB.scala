@@ -3,8 +3,8 @@ package com.onion.mongo
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
-import com.onion.core.models.{UniqueSelector, Model}
-import com.onion.model.{User, Meeting}
+import com.onion.core.models.{ UniqueSelector, Model }
+import com.onion.model.{ User, Meeting }
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json.RootJsonFormat
@@ -35,12 +35,12 @@ object DB extends ReactiveMongoPersistence {
     override def remove(selector: Selector)(implicit ec: ExecutionContext) = uncheckedRemoveById(selector.id)
   }
 
-//  def newGuid = java.util.UUID.randomUUID.toString
+  //  def newGuid = java.util.UUID.randomUUID.toString
 
-  private val seqIdMap = new ConcurrentHashMap[String,AtomicLong]
+  private val seqIdMap = new ConcurrentHashMap[String, AtomicLong]
 
-  def sequenceId(`type` : String) = {
-    seqIdMap.putIfAbsent(`type`,new AtomicLong(0))
+  def sequenceId(`type`: String) = {
+    seqIdMap.putIfAbsent(`type`, new AtomicLong(0))
     seqIdMap.get(`type`).getAndIncrement
   }
 

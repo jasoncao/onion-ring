@@ -5,6 +5,7 @@ import com.onion.mongo.DB.UserDao
 import spray.json.DefaultJsonProtocol
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Created by jincao on 1/30/15.
@@ -34,17 +35,27 @@ object ViewObject {
     implicit val format = jsonFormat1(apply)
 
     def fromModels(meetingsFuture: Future[Iterable[Meeting]]): Future[MeetingAbsResponse] = {
-      val result = for {
-        meetings <- meetingsFuture
-        meeting <- meetings
-        userOpt <- UserDao.findById(meeting.userId)
-        user <- userOpt
-      }
+      //      val result = for {
+      //        meetings <- meetingsFuture
+      //        meeting <- meetings
+      //        userOpt <- UserDao.findById(meeting.userId)
+      //        user <- userOpt
+      //      }
+      //      yield {
+      //        MeetingAbstraction
+      //          .fromModel(meeting, user)
+      //      }
+
+      val result = for (meetings <- meetingsFuture)
       yield {
-        MeetingAbstraction
-          .fromModel(meeting, user)
+        val listOfFuture = for (meeting <- meetings)
+        yield for (userOpt <- UserDao.findById(meeting.userId))
+          yield for (user <- userOpt)
+            yield MeetingAbstraction.fromModel(meeting, user)
+        Future.sequence(listOfFuture).map(_.filter(_.isDefined).map(_.get))
       }
-      result.flatMap(MeetingAbsResponse(_))
+
+      result.flatMap(_.map(MeetingAbsResponse(_)))
     }
   }
 

@@ -7,23 +7,23 @@ import com.onion.view.ViewObject._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 /**
  * Created by jincao on 1/30/15.
  */
 object ViewController {
 
-  def getMeetingsFromDB(cityId: Option[String]) =
+  def getMeetingsFromDB(cityId: Option[String]) : Future[ViewObject.MeetingAbsResponse] =
     cityId match {
-      case None => MeetingAbsResponse.fromModels(MeetingDao.all)
-      case Some(city) => Future.successful((StatusCodes.NotImplemented))
+      case None       => MeetingAbsResponse.fromModels(MeetingDao.all)
+//      case Some(city) => MeetingDao.findBySelector("cityId" -> cityId)
+      case _ => throw new RuntimeException("what the f**k.")
     }
 
   def getMeetingDetailFromDB(id: String) = {
-    MeetingDao.findById(id).map(meeting => StatusCodes.OK -> meeting.asInstanceOf[MeetingDetail])
+    MeetingDao.findById(id).map(meeting => StatusCodes.OK -> meeting)
   }
-
 
   def addMeetingToDB(meeting: MeetingDetail) = {
     val addFuture = MeetingDao.add(meeting.asInstanceOf[Meeting])

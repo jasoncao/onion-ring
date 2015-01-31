@@ -25,7 +25,7 @@ class UserDaoTest extends FunSuite {
     123,
     123)
 
-  ignore("user dao test") {
+  test("user dao test") {
     val userDao = DB.UserDao
     val result = userDao.add(user)
     Await.result(result, 100 days)

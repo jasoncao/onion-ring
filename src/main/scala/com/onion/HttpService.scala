@@ -1,6 +1,7 @@
 package com.onion
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{ActorSystem, Actor, ActorLogging, Props}
+import akka.event.LoggingAdapter
 import akka.http.Http
 import akka.http.server._
 import akka.stream.scaladsl.ImplicitFlowMaterializer
@@ -66,33 +67,36 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
           complete {
             getMeetingsFromDB(None)
           }
-        } ~
-          post {
-            entity(as[MeetingDetail]) {
-              md =>
-                complete {
-                  addMeetingToDB(md)
-                }
-            }
-          }
+        }
+//          post {
+//            entity(as[MeetingDetail]) {
+//              md =>
+//                complete {
+//                  addMeetingToDB(md)
+//                }
+//            }
+//          }
       }
     } ~
       path("meetings" / Segment) {
-        meetingId => get {
-          complete {
-            getMeetingDetailFromDB(meetingId)
-          }
-        }
-      } ~
-      path("meetings") {
-        parameters('cityId.as[String]) {
-          (cityId) => get {
+        meetingId =>
+          get {
             complete {
-              getMeetingsFromDB(Option(cityId))
+              getMeetingDetailFromDB(meetingId)
             }
           }
-        }
       }
+//      path("meetings") {
+//        parameters('cityId.as[String]) {
+//          (cityId) =>
+//            get {
+//              complete {
+//                //                getMeetingsFromDB(Option(cityId))
+//                "haha"
+//              }
+//            }
+//        }
+//      }
 
 }
 

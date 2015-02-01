@@ -12,41 +12,38 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 object ViewObject {
 
-  type MeetingDetail = Meeting
 
   type UserDetail = User
 
-  case class MeetingAbstraction(id: String, subject: String, desc: String, price: Double,
-                                createTime: Long, updateTime: Long, hosterId: String, hosterDesc: String,
-                                locationName: String)
+  type CalenderDetail = Calender
+
+  type LocationDetail = Location
+
+  case class UserAbstraction(id: String, name: String, title: String, icon: String, rating: Int)
+
+  object UserAbstraction extends DefaultJsonProtocol {
+    implicit val format = jsonFormat5(apply)
+  }
+
+  case class MeetingAbstraction(id: String, subject: String, target: String, desc: String, price: Double,
+                                createTime: Long, updateTime: Long, seller: UserAbstraction)
 
   object MeetingAbstraction extends DefaultJsonProtocol {
-    implicit val format = jsonFormat9(apply)
+    implicit val format = jsonFormat8(apply)
 
     implicit def fromModel(meeting: Meeting, user: User): MeetingAbstraction = {
-      MeetingAbstraction(meeting.id, meeting.subject, meeting.description, meeting.price,
-        meeting.createTime, meeting.updateTime, meeting.userId, user.description, meeting.location.name)
+      MeetingAbstraction(meeting.id, meeting.subject, meeting.targetUser, meeting.description, meeting.price,
+        meeting.createTime, meeting.updateTime,
+        UserAbstraction(user.id,user.name,user.jobTitle,user.photo,user.score))
     }
   }
 
-  case class MeetingAbsResponse(meetingAbsList: Iterable[MeetingAbstraction])
+  case class MeetingAbsResponse(meetings: Iterable[MeetingAbstraction])
 
   object MeetingAbsResponse extends DefaultJsonProtocol {
     implicit val format = jsonFormat1(apply)
 
     def fromModels(meetingsFuture: Future[Iterable[Meeting]]): Future[MeetingAbsResponse] = {
-      //      val result = for {
-      //        meetings <- meetingsFuture //Future
-      //        meeting <- meetings //List
-      //        userOpt <- UserDao.findById(meeting.userId) //Future
-      //        user <- userOpt //Option
-      //      }
-      //      yield {
-      //        MeetingAbstraction
-      //          .fromModel(meeting, user)
-      //      } //Future[List[Future[MeetingAbstraction]]]
-      //  target : Future[MeetingAbsResponse[List[MeetingAbstraction]]]
-
       val result = for (meetings <- meetingsFuture)
       yield {
         val listOfFuture = for (meeting <- meetings)
@@ -59,5 +56,8 @@ object ViewObject {
       result.flatMap(_.map(MeetingAbsResponse(_)))
     }
   }
+
+  case class MeetingDetail(id: String,subject: String,target: String,desc: String,price: Double,createTime: Long, updateTime:Long,
+                           seller: UserAbstraction, calender: CalenderDetail,location: LocationDetail)
 
 }

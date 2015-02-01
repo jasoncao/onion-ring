@@ -1,6 +1,6 @@
 package com.onion.mongo
 
-import com.onion.model.{RegularType, Calender, Location, Meeting}
+import com.onion.model.{Calender, Location, Meeting}
 import org.scalatest.FunSuite
 import reactivemongo.bson.BSONDocument
 import scala.concurrent.Await
@@ -12,8 +12,8 @@ import scala.concurrent.duration._
  */
 class MeetingDaoTest extends FunSuite{
 
-  val location = Location("haha_name","haha_gps","haha_city",123,123)
-  val calender = Calender(123,123,RegularType.EveryDay,123,123)
+  val location = Location("123","haha_name","haha_gps","haha_city")
+  val calender = Calender("123",123,123)
   val meeting = Meeting("haha_id","0","haha_subject","haha_description","haha_target_user",12.34,calender,location,123,123)
 
   test("meeting dao test") {
@@ -24,7 +24,6 @@ class MeetingDaoTest extends FunSuite{
 
 
 //    val result2 = meetingDao.findById("0")
-//    val result2 = meetingDao.find(BSONDocument("location.cityId" -> BSONTypeMapper.StringTypeMapper.toBSON("haha_city")))
     val result2 = meetingDao.findByCityId("haha_city")
     println(Await.result(result2, 100 days))
 

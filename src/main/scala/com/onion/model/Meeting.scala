@@ -7,43 +7,41 @@ import com.onion.core.Formats._
 /**
  * Created by famo on 1/27/15.
  */
-
-sealed abstract class RegularType(val id: String, val label: String) extends Enum[RegularType](id)
-
-object RegularType extends EnumCompanion[RegularType] {
-
-  case object OneDay extends RegularType("oneDay", "one day")
-
-  case object EveryDay extends RegularType("everyDay", "every day")
-
-  register(
-    OneDay,
-    EveryDay
-  )
-}
+// don't need it now
+//sealed abstract class RegularType(val id: String, val label: String) extends Enum[RegularType](id)
+//
+//object RegularType extends EnumCompanion[RegularType] {
+//
+//  case object OneDay extends RegularType("oneDay", "one day")
+//
+//  case object EveryDay extends RegularType("everyDay", "every day")
+//
+//  register(
+//    OneDay,
+//    EveryDay
+//  )
+//}
 
 case class Calender(
+  id:          String,
   startTime:   Long,
-  duration:    Long,
-  regularType: RegularType = RegularType.OneDay,
-  createTime:  Long,
-  updateTime:  Long
+  duration:    Long
+//  regularType: RegularType = RegularType.OneDay,
 )
 
 object Calender {
-  implicit val reminderJsonFormat = jsonFormat5(apply)
+  implicit val reminderJsonFormat = jsonFormat3(apply)
 }
 
 case class Location(
+  id:         String,
   name:       String,
   gps:        String,
-  cityId:     String,
-  createTime: Long,
-  updateTime: Long
+  cityId:     String
 )
 
 object Location {
-  implicit val reminderJsonFormat = jsonFormat5(apply)
+  implicit val reminderJsonFormat = jsonFormat4(apply)
 }
 
 case class Meeting(

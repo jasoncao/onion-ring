@@ -18,7 +18,6 @@ object ViewController {
     cityId match {
       case None       => MeetingAbsResponse.fromModels(MeetingDao.all)
       case Some(city) => MeetingAbsResponse.fromModels(MeetingDao.findByCityId(city))
-      case _ => throw new RuntimeException("what the f**k.")
     }
 
   def getMeetingDetailFromDB(id: String) = {

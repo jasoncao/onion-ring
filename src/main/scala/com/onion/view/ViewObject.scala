@@ -36,15 +36,16 @@ object ViewObject {
 
     def fromModels(meetingsFuture: Future[Iterable[Meeting]]): Future[MeetingAbsResponse] = {
       //      val result = for {
-      //        meetings <- meetingsFuture
-      //        meeting <- meetings
-      //        userOpt <- UserDao.findById(meeting.userId)
-      //        user <- userOpt
+      //        meetings <- meetingsFuture //Future
+      //        meeting <- meetings //List
+      //        userOpt <- UserDao.findById(meeting.userId) //Future
+      //        user <- userOpt //Option
       //      }
       //      yield {
       //        MeetingAbstraction
       //          .fromModel(meeting, user)
-      //      }
+      //      } //Future[List[Future[MeetingAbstraction]]]
+      //  target : Future[MeetingAbsResponse[List[MeetingAbstraction]]]
 
       val result = for (meetings <- meetingsFuture)
       yield {

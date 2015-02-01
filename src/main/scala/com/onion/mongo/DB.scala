@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 import com.onion.core.models.{ UniqueSelector, Model }
 import com.onion.model.{ User, Meeting }
+import reactivemongo.bson.BSONDocument
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json.RootJsonFormat
@@ -44,7 +45,11 @@ object DB extends ReactiveMongoPersistence {
     seqIdMap.get(`type`).getAndIncrement
   }
 
-  object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = sequenceId("meeting").toString))
+  class MeetingDao(implicit idMapper : BSONTypeMapper[String]) extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = sequenceId("meeting").toString)) {
+    def findByCityId(cityId : String) = find(BSONDocument("location.cityId" -> idMapper.toBSON(cityId)))
+  }
+
+  object MeetingDao extends MeetingDao
 
   object UserDao extends UnsecuredDAO[User]("user")(_.copy(id = sequenceId("user").toString))
 }

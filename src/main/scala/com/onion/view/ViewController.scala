@@ -17,7 +17,7 @@ object ViewController {
   def getMeetingsFromDB(cityId: Option[String]) : Future[ViewObject.MeetingAbsResponse] =
     cityId match {
       case None       => MeetingAbsResponse.fromModels(MeetingDao.all)
-//      case Some(city) => MeetingDao.findBySelector("cityId" -> cityId)
+      case Some(city) => MeetingAbsResponse.fromModels(MeetingDao.findByCityId(city))
       case _ => throw new RuntimeException("what the f**k.")
     }
 

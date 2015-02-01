@@ -2,6 +2,7 @@ package com.onion.mongo
 
 import com.onion.model.{RegularType, Calender, Location, Meeting}
 import org.scalatest.FunSuite
+import reactivemongo.bson.BSONDocument
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -18,11 +19,13 @@ class MeetingDaoTest extends FunSuite{
   test("meeting dao test") {
 
     val meetingDao = DB.MeetingDao
-    val result = meetingDao.add(meeting)
-    Await.result(result, 100 days)
+//    val result = meetingDao.add(meeting)
+//    Await.result(result, 100 days)
 
 
-    val result2 = meetingDao.findById("0")
+//    val result2 = meetingDao.findById("0")
+//    val result2 = meetingDao.find(BSONDocument("location.cityId" -> BSONTypeMapper.StringTypeMapper.toBSON("haha_city")))
+    val result2 = meetingDao.findByCityId("haha_city")
     println(Await.result(result2, 100 days))
 
 

@@ -1,13 +1,11 @@
 package com.onion
 
-import akka.actor.{ActorSystem, Actor, ActorLogging, Props}
-import akka.event.LoggingAdapter
+import akka.actor.{Actor, ActorLogging, Props}
 import akka.http.Http
 import akka.http.server._
 import akka.stream.scaladsl.ImplicitFlowMaterializer
 import akka.util.Timeout
 import com.onion.core.util.SprayJsonMarshalling
-import com.onion.view.ViewObject._
 import com.onion.view.ViewController._
 import spray.json._
 
@@ -63,19 +61,14 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
   private def meetings: Route =
     path("meetings") {
       pathEnd {
-        get {
-          complete {
-            getMeetingsFromDB(None)
+        parameter("cityId" ? "0") { cityId => {
+          get {
+            complete {
+              getMeetingsFromDB(Option(cityId))
+            }
           }
         }
-//          post {
-//            entity(as[MeetingDetail]) {
-//              md =>
-//                complete {
-//                  addMeetingToDB(md)
-//                }
-//            }
-//          }
+        }
       }
     } ~
       path("meetings" / Segment) {
@@ -86,17 +79,18 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
             }
           }
       }
-//      path("meetings") {
-//        parameters('cityId.as[String]) {
-//          (cityId) =>
-//            get {
-//              complete {
-//                //                getMeetingsFromDB(Option(cityId))
-//                "haha"
-//              }
-//            }
-//        }
-//      }
+
+  //      path("meetings") {
+  //        parameters('cityId.as[String]) {
+  //          (cityId) =>
+  //            get {
+  //              complete {
+  //                //                getMeetingsFromDB(Option(cityId))
+  //                "haha"
+  //              }
+  //            }
+  //        }
+  //      }
 
 }
 

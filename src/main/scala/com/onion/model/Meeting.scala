@@ -54,9 +54,10 @@ case class Meeting(
   calender:    Calender,
   location:    Location,
   createTime:  Long,
-  updateTime:  Long
+  updateTime:  Long,
+  isDeleted:   Boolean
 ) extends Model[String]
 
 object Meeting {
-  implicit val reminderJsonFormat = jsonFormat10(apply)
+  implicit val reminderJsonFormat = jsonFormat11(apply)
 }

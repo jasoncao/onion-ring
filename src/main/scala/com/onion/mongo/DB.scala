@@ -3,13 +3,14 @@ package com.onion.mongo
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 
-import com.onion.core.models.{ UniqueSelector, Model }
-import com.onion.model.{ User, Meeting }
+import com.onion.core.models.{UniqueSelector, Model}
+import com.onion.model.{User, Meeting}
 import reactivemongo.bson.BSONDocument
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json.RootJsonFormat
 import com.onion.core.Formats._
+
 /**
  * Created by famo on 1/27/15.
  */
@@ -36,20 +37,12 @@ object DB extends ReactiveMongoPersistence {
     override def remove(selector: Selector)(implicit ec: ExecutionContext) = uncheckedRemoveById(selector.id)
   }
 
-  //  def newGuid = java.util.UUID.randomUUID.toString
+  def newGuid = System.currentTimeMillis() + java.util.UUID.randomUUID.toString
 
-  private val seqIdMap = new ConcurrentHashMap[String, AtomicLong]
-
-  def sequenceId(`type`: String) = {
-    seqIdMap.putIfAbsent(`type`, new AtomicLong(0))
-    seqIdMap.get(`type`).getAndIncrement
+  object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = newGuid)) {
+    def findByCityId(cityId: String) = find(BSONDocument("location.cityId" -> cityId))
   }
 
-  class MeetingDao(implicit idMapper : BSONTypeMapper[String]) extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = sequenceId("meeting").toString)) {
-    def findByCityId(cityId : String) = find(BSONDocument("location.cityId" -> idMapper.toBSON(cityId)))
-  }
+  object UserDao extends UnsecuredDAO[User]("user")(_.copy(id = newGuid))
 
-  object MeetingDao extends MeetingDao
-
-  object UserDao extends UnsecuredDAO[User]("user")(_.copy(id = sequenceId("user").toString))
 }

@@ -23,7 +23,8 @@ class UserDaoTest extends FunSuite {
     "haha_description",
     10,
     123,
-    123)
+    123,
+    false)
 
   test("user dao test") {
     val userDao = DB.UserDao

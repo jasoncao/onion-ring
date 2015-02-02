@@ -36,9 +36,10 @@ case class User(
   description: String,
   score:       Int,
   createTime:  Long,
-  updateTime:  Long
+  updateTime:  Long,
+  isDeleted:   Boolean
 ) extends Model[String]
 
 object User {
-  implicit val reminderJsonFormat = jsonFormat14(apply)
+  implicit val reminderJsonFormat = jsonFormat15(apply)
 }

@@ -34,7 +34,7 @@ object ViewObject {
     implicit def fromModel(meeting: Meeting, user: User): MeetingAbstraction = {
       MeetingAbstraction(meeting.id, meeting.subject, meeting.targetUser, meeting.description, meeting.price,
         meeting.createTime, meeting.updateTime,
-        UserAbstraction(user.id,user.name,user.jobTitle,user.photo,user.score))
+        UserAbstraction(user.id, user.name, user.jobTitle, user.photo, user.score))
     }
   }
 
@@ -56,8 +56,48 @@ object ViewObject {
       result.flatMap(_.map(MeetingAbsResponse(_)))
     }
   }
+/************************** todo line ****************************/
+  case class CommentDetail(id: String, rating: Int, content: String, user: UserAbstraction)
 
-  case class MeetingDetail(id: String,subject: String,target: String,desc: String,price: Double,createTime: Long, updateTime:Long,
-                           seller: UserAbstraction, calender: CalenderDetail,location: LocationDetail)
+  object CommentDetail extends DefaultJsonProtocol {
+    implicit val format = jsonFormat4(apply)
+
+    def fromModel(comment: Comment): Future[CommentDetail] = {
+      UserDao.findById(comment.userId).map {
+        case Some(user) => CommentDetail(comment.id, comment.rating, comment.content, UserAbstraction(user.id, user.name, user.jobTitle, user.photo, user.score))
+        case None => null // TODO: log error
+      }
+    }
+
+  }
+
+  case class MeetingDetail(id: String, subject: String, target: String, desc: String, price: Double, createTime: Long, updateTime: Long,
+                           seller: UserAbstraction, calenders: List[CalenderDetail], locations: List[LocationDetail], comments: List[CommentDetail])
+
+  object MeetingDetail extends DefaultJsonProtocol {
+    implicit val format = jsonFormat11(apply)
+  }
+
+  case class MeetingResponse(meeting: MeetingDetail)
+
+  object MeetingResponse extends DefaultJsonProtocol {
+    implicit val format = jsonFormat1(apply)
+
+    def fromModels(meetingFuture: Future[Option[Meeting]]) = {
+      meetingFuture.flatMap[MeetingDetail] {
+        case None => null // TODO: log error
+        case Some(meeting) => UserDao.findById(meeting.userId).flatMap[MeetingDetail] {
+          case None => null // TODO: log error
+          case Some(seller) => {
+            val cd: List[Future[CommentDetail]] = for (comment <- meeting.comments)
+            yield CommentDetail.fromModel(comment)
+            val commentDetail: Future[List[CommentDetail]] = Future.sequence(cd)
+            commentDetail.map[MeetingDetail]((commentDetails: List[CommentDetail]) => MeetingDetail(meeting.id, meeting.subject, meeting.targetUser, meeting.description, meeting.price, meeting.createTime, meeting.updateTime,
+              UserAbstraction(seller.id, seller.name, seller.jobTitle, seller.photo, seller.score), meeting.calenders, meeting.locations, commentDetails))
+          }
+        }
+      }
+    }
+  }
 
 }

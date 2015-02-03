@@ -59,26 +59,28 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
     }
 
   private def meetings: Route =
-    path("meetings") {
-      pathEnd {
-        parameter("cityId" ? "0", "pageNum" ? 1) { (cityId, pageNum) => {
-          get {
-            complete {
-              getMeetingsFromDB(Option(cityId))
+    pathPrefix("api/v1/") {
+      path("meetings") {
+        pathEnd {
+          parameter("cityId" ? "0", "pageNum" ? 1) { (cityId, pageNum) => {
+            get {
+              complete {
+                getMeetingsFromDB(Option(cityId), Option(pageNum))
+              }
             }
           }
-        }
-        }
-      }
-    } ~
-      path("meetings" / Segment) {
-        meetingId =>
-          get {
-            complete {
-              getMeetingDetailFromDB(meetingId)
-            }
           }
-      }
+        }
+      } ~
+        path("meetings" / Segment) {
+          meetingId =>
+            get {
+              complete {
+                getMeetingDetailFromDB(meetingId)
+              }
+            }
+        }
+    }
 
   //      path("meetings") {
   //        parameters('cityId.as[String]) {

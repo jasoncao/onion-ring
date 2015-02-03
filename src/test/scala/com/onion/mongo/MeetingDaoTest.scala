@@ -12,9 +12,9 @@ import scala.concurrent.duration._
  */
 class MeetingDaoTest extends FunSuite{
 
-  val location = Location("123","haha_name","haha_gps","haha_city")
-  val calender = Calender("123",123,123)
-  val meeting = Meeting(null,"0","haha_subject","haha_description","haha_target_user",12.34,calender,location,123,123,false)
+  val locations = List(Location("123","haha_name","haha_gps"))
+  val calenders = List(Calender("123",123,123))
+  val meeting = Meeting(null,"0","haha_city","haha_subject","haha_description","haha_target_user",12.34,calenders,locations,List(),123,123,false)
 
   test("meeting dao test") {
 

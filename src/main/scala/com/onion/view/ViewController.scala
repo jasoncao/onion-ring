@@ -14,14 +14,16 @@ import scala.util.{ Failure, Success }
  */
 object ViewController {
 
-  def getMeetingsFromDB(cityId: Option[String]) : Future[ViewObject.MeetingAbsResponse] =
-    cityId match {
-      case None       => MeetingAbsResponse.fromModels(MeetingDao.all)
-      case Some(city) => MeetingAbsResponse.fromModels(MeetingDao.findByCityId(city))
+  def getMeetingsFromDB(cityId: Option[String], pageNum: Option[Int]) : Future[ViewObject.MeetingAbsResponse] =
+    (cityId, pageNum) match {
+      case (None, None)       => MeetingAbsResponse.fromModels(MeetingDao.findByPage())
+      case (Some(city),None) => MeetingAbsResponse.fromModels(MeetingDao.findByCityId(city))
+      case (None, Some(page)) => MeetingAbsResponse.fromModels(MeetingDao.findByPage(page))
+      case (Some(city), Some(page)) => MeetingAbsResponse.fromModels(MeetingDao.findByCityId(city,page))
     }
 
   def getMeetingDetailFromDB(id: String) = {
-    MeetingDao.findById(id).map(meeting => StatusCodes.OK -> meeting)
+    MeetingResponse.fromModels(MeetingDao.findById(id))
   }
 
   def addMeetingToDB(meeting: MeetingDetail) = {

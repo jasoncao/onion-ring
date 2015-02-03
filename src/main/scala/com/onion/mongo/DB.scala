@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicLong
 import com.onion.core.models.{UniqueSelector, Model}
 import com.onion.model.{User, Meeting}
 import reactivemongo.bson.BSONDocument
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json.RootJsonFormat
 import com.onion.core.Formats._
@@ -40,7 +40,8 @@ object DB extends ReactiveMongoPersistence {
   def newGuid = System.currentTimeMillis() + java.util.UUID.randomUUID.toString
 
   object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = newGuid)) {
-    def findByCityId(cityId: String) = find(BSONDocument("location.cityId" -> cityId))
+    def findByCityId(cityId: String, pageNum : Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument("cityId" -> cityId),pageNum)
+    def findByPage(pageNum: Int = 1) : Future[List[Meeting]] = find[Meeting](BSONDocument(),pageNum)
   }
 
   object UserDao extends UnsecuredDAO[User]("user")(_.copy(id = newGuid))

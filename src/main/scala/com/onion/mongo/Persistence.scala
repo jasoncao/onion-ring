@@ -119,7 +119,7 @@ trait ReactiveMongoPersistence {
     /**
      *  add by Fan, for pagination
      */
-    def find[P](selector: JsObject = emptyQuery.asInstanceOf[JsObject], pageNumber: Int)(implicit numberPerPage : Int, reads: RootJsonReader[P], ec: ExecutionContext) = {
+    def find[P](selector: BSONDocument = emptyQuery, pageNumber: Int)(implicit numberPerPage : Int, reads: RootJsonReader[P], ec: ExecutionContext) = {
       collection.find(selector).options(QueryOpts((pageNumber - 1)* numberPerPage, numberPerPage)).cursor[P].collect[List](numberPerPage)
     }
 

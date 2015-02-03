@@ -1,8 +1,8 @@
 package com.onion.model
 
 import com.onion.core.models.Model
-import com.onion.core.util.enum._
 import com.onion.core.Formats._
+
 
 /**
  * Created by famo on 1/27/15.
@@ -22,11 +22,21 @@ import com.onion.core.Formats._
 //  )
 //}
 
+case class Comment(
+  id:        String,
+  rating:    Int,
+  content:   String,
+  userId:    String
+)
+
+object Comment {
+  implicit val reminderJsonFormat = jsonFormat4(apply)
+}
+
 case class Calender(
-  id:          String,
-  startTime:   Long,
-  duration:    Long
-//  regularType: RegularType = RegularType.OneDay,
+  id:        String,
+  fromTime:  Long,
+  toTime:    Long
 )
 
 object Calender {
@@ -36,28 +46,29 @@ object Calender {
 case class Location(
   id:         String,
   name:       String,
-  gps:        String,
-  cityId:     String
+  gps:        String
 )
 
 object Location {
-  implicit val reminderJsonFormat = jsonFormat4(apply)
+  implicit val reminderJsonFormat = jsonFormat3(apply)
 }
 
 case class Meeting(
   id:          String,
+  cityId:      String,
   userId:      String,
   subject:     String,
   description: String,
   targetUser:  String,
   price:       Double,
-  calender:    Calender,
-  location:    Location,
+  calenders:   List[Calender],
+  locations:   List[Location],
+  comments:    List[Comment],
   createTime:  Long,
   updateTime:  Long,
   isDeleted:   Boolean
 ) extends Model[String]
 
 object Meeting {
-  implicit val reminderJsonFormat = jsonFormat11(apply)
+  implicit val reminderJsonFormat = jsonFormat13(apply)
 }

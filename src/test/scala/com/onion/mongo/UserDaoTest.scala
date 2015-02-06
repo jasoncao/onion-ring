@@ -31,7 +31,7 @@ class UserDaoTest extends FunSuite {
     val result = userDao.add(user)
     Await.result(result, 100 days)
 
-    val result2 = userDao.findById("0")
-    println(Await.result(result2, 100 days))
+//    val result2 = userDao.findById("0")
+//    println(Await.result(result2, 100 days))
   }
 }

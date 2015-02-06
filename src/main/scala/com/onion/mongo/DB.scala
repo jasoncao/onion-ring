@@ -37,11 +37,19 @@ object DB extends ReactiveMongoPersistence {
     override def remove(selector: Selector)(implicit ec: ExecutionContext) = uncheckedRemoveById(selector.id)
   }
 
-  def newGuid = System.currentTimeMillis() + java.util.UUID.randomUUID.toString
+  def newGuid = System.currentTimeMillis + "-" + java.util.UUID.randomUUID.toString
 
-  object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(_.copy(id = newGuid)) {
-    def findByCityId(cityId: String, pageNum : Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument("cityId" -> cityId),pageNum)
-    def findByPage(pageNum: Int = 1) : Future[List[Meeting]] = find[Meeting](BSONDocument(),pageNum)
+  def generateMeetingIds(meeting: Meeting): Meeting = {
+    val _locations = meeting.locations.map(_.copy(id = newGuid))
+    val _calenders = meeting.calenders.map(_.copy(id = newGuid))
+    val _comments = meeting.comments.map(_.copy(id = newGuid))
+    meeting.copy(id = newGuid,locations = _locations,calenders = _calenders,comments = _comments)
+  }
+
+  object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(generateMeetingIds) {
+    def findByCityId(cityId: String, pageNum: Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument("cityId" -> cityId), pageNum)
+
+    def findByPage(pageNum: Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument(), pageNum)
   }
 
   object UserDao extends UnsecuredDAO[User]("user")(_.copy(id = newGuid))

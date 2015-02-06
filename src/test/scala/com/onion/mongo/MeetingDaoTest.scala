@@ -14,7 +14,7 @@ class MeetingDaoTest extends FunSuite{
 
   val locations = List(Location("123","haha_name","haha_gps"))
   val calenders = List(Calender("123",123,123))
-  val meeting = Meeting(null,"0","haha_city","haha_subject","haha_description","haha_target_user",12.34,calenders,locations,List(),123,123,false)
+  val meeting = Meeting(null,"haha_city","1423223642935-b3565b86-426e-48a0-b316-ed9335efbeff","haha_subject","haha_description","haha_target_user",12.34,calenders,locations,List(),123,123,false)
 
   test("meeting dao test") {
 

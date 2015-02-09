@@ -1,13 +1,12 @@
 package com.onion.view
 
-import akka.http.model.StatusCodes
-import com.onion.model.Meeting
 import com.onion.mongo.DB._
+import com.onion.view.ViewObject.ResponseCode.{ERROR500, OK200}
 import com.onion.view.ViewObject._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.{ Failure, Success }
+import scala.concurrent.{Promise, Future}
+import scala.util.{Failure, Success}
 
 /**
  * Created by jincao on 1/30/15.
@@ -26,12 +25,15 @@ object ViewController {
     MeetingResponse.fromModels(MeetingDao.findById(id))
   }
 
-  def addMeetingToDB(meeting: MeetingDetail) = {
-    val addFuture = MeetingDao.add(meeting.asInstanceOf[Meeting])
-    addFuture.onComplete {
-      case Success(m) => StatusCodes.Created
-      case Failure(t) => StatusCodes.Conflict
+  def addMeetingToDB(meeting: Option[MeetingDetail]) : Future[PostResponse] = {
+    val postResponse = Promise[PostResponse]()
+    meeting match {
+      case Some(meetingDetail) => MeetingDao.add(meetingDetail.toMeeting).onComplete {
+        case Success(_) => postResponse success PostResponse(OK200,"success")
+        case Failure(t) => postResponse success PostResponse(ERROR500,t.getMessage)
+
+      }
     }
-    addFuture
+    postResponse.future
   }
 }

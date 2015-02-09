@@ -7,9 +7,11 @@ import akka.stream.scaladsl.ImplicitFlowMaterializer
 import akka.util.Timeout
 import com.onion.core.util.SprayJsonMarshalling
 import com.onion.view.ViewController._
+import com.onion.view.ViewObject.{PostMeeting, PutMeeting}
 import spray.json._
 
 import scala.concurrent.duration._
+import com.onion.core.util.OptionUtil._
 
 /**
  * Created by jincao on 1/24/15.
@@ -61,28 +63,37 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
   private def meetings: Route =
     pathPrefix("api") {
       pathPrefix("v1") {
-        pathEnd {
-          complete {
-            "haha"
-          }
-        } ~
-          path("meetings") {
-            pathEnd {
-              parameter("cityId" ? "0", "pageNum" ? 1) { (cityId, pageNum) => {
-                get {
+        path("meetings") {
+          pathEnd {
+            parameter("cityId" ? "0", "pageNum" ? 1) { (cityId, pageNum) => {
+              get {
+                complete {
+                  getMeetingsFromDB(cityId, pageNum)
+                }
+              }
+            }
+            } ~
+              put {
+                entity(as[PutMeeting]) { putMeeting =>
                   complete {
-                    getMeetingsFromDB(Option(cityId), Option(pageNum))
+                    addMeetingToDB(putMeeting.meeting)
                   }
                 }
               }
-              }
-            }
-          } ~
+          }
+        } ~
           path("meetings" / Segment) {
             meetingId =>
               get {
                 complete {
                   getMeetingDetailFromDB(meetingId)
+                }
+              } ~
+              post {
+                entity(as[PostMeeting]) { postMeeting =>
+                  complete {
+                    ""
+                  }
                 }
               }
           }

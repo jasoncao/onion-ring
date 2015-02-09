@@ -23,10 +23,10 @@ import com.onion.core.Formats._
 //}
 
 case class Comment(
-  id:        String,
-  rating:    Int,
-  content:   String,
-  userId:    String
+  id:        Option[String],
+  rating:    Option[Int],
+  content:   Option[String],
+  userId:    Option[String]
 )
 
 object Comment {
@@ -34,9 +34,9 @@ object Comment {
 }
 
 case class Calender(
-  id:        String,
-  fromTime:  Long,
-  toTime:    Long
+  id:        Option[String],
+  fromTime:  Option[Long],
+  toTime:    Option[Long]
 )
 
 object Calender {
@@ -44,9 +44,9 @@ object Calender {
 }
 
 case class Location(
-  id:         String,
-  name:       String,
-  gps:        String
+  id:         Option[String],
+  name:       Option[String],
+  gps:        Option[String]
 )
 
 object Location {
@@ -55,18 +55,18 @@ object Location {
 
 case class Meeting(
   id:          String,
-  cityId:      String,
-  userId:      String,
-  subject:     String,
-  description: String,
-  targetUser:  String,
-  price:       Double,
-  calenders:   List[Calender],
-  locations:   List[Location],
-  comments:    List[Comment],
-  createTime:  Long,
-  updateTime:  Long,
-  isDeleted:   Boolean
+  cityId:      Option[String],
+  userId:      Option[String],
+  subject:     Option[String],
+  description: Option[String],
+  targetUser:  Option[String],
+  price:       Option[Double],
+  calenders:   Option[List[Calender]],
+  locations:   Option[List[Location]],
+  comments:    Option[List[Comment]],
+  createTime:  Option[Long],
+  updateTime:  Option[Long],
+  isDeleted:   Option[Boolean]
 ) extends Model[String]
 
 object Meeting {

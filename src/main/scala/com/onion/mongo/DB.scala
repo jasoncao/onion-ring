@@ -1,9 +1,9 @@
 package com.onion.mongo
 
-import com.onion.core.models.{UniqueSelector, Model}
-import com.onion.model.{User, Meeting}
+import com.onion.core.models.{ UniqueSelector, Model }
+import com.onion.model.{ User, Meeting }
 import reactivemongo.bson.BSONDocument
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.{ Future, ExecutionContext }
 import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json.RootJsonFormat
 import com.onion.core.Formats._
@@ -42,7 +42,7 @@ object DB extends ReactiveMongoPersistence {
     val _calenders = meeting.calenders.getOrElse(List()).map(_.copy(id = newGuid))
     val _comments = meeting.comments.getOrElse(List()).map(_.copy(id = newGuid))
     val _createTime = meeting.createTime.getOrElse(System.currentTimeMillis())
-    meeting.copy(id = newGuid,locations = _locations,calenders = _calenders,comments = _comments,createTime = _createTime, updateTime = System.currentTimeMillis())
+    meeting.copy(id = newGuid, locations = _locations, calenders = _calenders, comments = _comments, createTime = _createTime, updateTime = System.currentTimeMillis())
   }
 
   object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(generateMeetingIds) {

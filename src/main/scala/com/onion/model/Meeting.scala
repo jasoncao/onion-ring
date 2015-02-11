@@ -3,7 +3,6 @@ package com.onion.model
 import com.onion.core.models.Model
 import com.onion.core.Formats._
 
-
 /**
  * Created by famo on 1/27/15.
  */
@@ -23,10 +22,10 @@ import com.onion.core.Formats._
 //}
 
 case class Comment(
-  id:        Option[String],
-  rating:    Option[Int],
-  content:   Option[String],
-  userId:    Option[String]
+  id:      Option[String],
+  rating:  Option[Int],
+  content: Option[String],
+  userId:  Option[String]
 )
 
 object Comment {
@@ -34,9 +33,9 @@ object Comment {
 }
 
 case class Calender(
-  id:        Option[String],
-  fromTime:  Option[Long],
-  toTime:    Option[Long]
+  id:       Option[String],
+  fromTime: Option[Long],
+  toTime:   Option[Long]
 )
 
 object Calender {
@@ -44,9 +43,9 @@ object Calender {
 }
 
 case class Location(
-  id:         Option[String],
-  name:       Option[String],
-  gps:        Option[String]
+  id:   Option[String],
+  name: Option[String],
+  gps:  Option[String]
 )
 
 object Location {
@@ -59,7 +58,7 @@ case class Meeting(
   userId:      Option[String],
   subject:     Option[String],
   description: Option[String],
-  targetUser:  Option[String],
+  target:      Option[String],
   price:       Option[Double],
   calenders:   Option[List[Calender]],
   locations:   Option[List[Location]],

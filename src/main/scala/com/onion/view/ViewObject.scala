@@ -1,6 +1,6 @@
 package com.onion.view
 
-import com.onion.core.util.enum.{Enum,EnumCompanion}
+import com.onion.core.util.enum.{ Enum, EnumCompanion }
 import com.onion.model._
 import com.onion.mongo.DB.UserDao
 import spray.json.DefaultJsonProtocol
@@ -14,7 +14,6 @@ import com.onion.core.util.OptionUtil._
  * Created by famo on 1/30/15.
  */
 object ViewObject {
-
 
   type UserDetail = User
 
@@ -35,7 +34,7 @@ object ViewObject {
     implicit val format = jsonFormat8(apply)
 
     implicit def fromModel(meeting: Meeting, user: User): MeetingAbstraction = {
-      MeetingAbstraction(meeting.id, meeting.subject, meeting.targetUser, meeting.description, meeting.price,
+      MeetingAbstraction(meeting.id, meeting.subject, meeting.target, meeting.description, meeting.price,
         meeting.createTime, meeting.updateTime,
         UserAbstraction(user.id, user.name, user.jobTitle, user.photo, user.score))
     }
@@ -48,7 +47,7 @@ object ViewObject {
 
     def fromModels(meetingsFuture: Future[Iterable[Meeting]]): Future[MeetingAbsResponse] = {
       meetingsFuture.scanIterable[MeetingAbstraction]((meeting: Meeting) => {
-        UserDao.findById(meeting.userId).make[MeetingAbstraction](user => MeetingAbstraction.fromModel(meeting, user))
+        UserDao.findById(meeting.userId).make[MeetingAbstraction](user => MeetingAbstraction.fromModel(meeting, user)).get(null)
       }).map(MeetingAbsResponse(_))
       //
       //
@@ -107,7 +106,7 @@ object ViewObject {
     implicit val format = jsonFormat12(apply)
 
     def fromModels(meeting: Meeting, seller: User, comments: List[CommentDetail]) = {
-      MeetingDetail(meeting.id, meeting.cityId, meeting.subject, meeting.targetUser, meeting.description, meeting.price, meeting.createTime, meeting.updateTime,
+      MeetingDetail(meeting.id, meeting.cityId, meeting.subject, meeting.target, meeting.description, meeting.price, meeting.createTime, meeting.updateTime,
         UserAbstraction(seller.id, seller.name, seller.jobTitle, seller.photo, seller.score), meeting.calenders, meeting.locations, comments)
     }
   }
@@ -120,17 +119,17 @@ object ViewObject {
     def fromModels(meetingFuture: Future[Option[Meeting]]) = {
       meetingFuture
         .then(meeting => {
-        UserDao.findById(meeting.userId)
-          .then(seller => {
-          meeting.comments.get.map(comment => {
-            UserDao.findById(comment.userId).make(user => {
-              CommentDetail.fromModel(comment, user)
+          UserDao.findById(meeting.userId)
+            .then(seller => {
+              meeting.comments.get.map(comment => {
+                UserDao.findById(comment.userId).make(user => {
+                  CommentDetail.fromModel(comment, user)
+                })
+              }).make[MeetingDetail](comments => {
+                MeetingDetail.fromModels(meeting, seller, comments.asInstanceOf[List[CommentDetail]])
+              })
             })
-          }).make[MeetingDetail](comments => {
-            MeetingDetail.fromModels(meeting, seller, comments.asInstanceOf[List[CommentDetail]])
-          })
-        })
-      }).map(MeetingResponse(_))
+        }).map(MeetingResponse(_))
     }
   }
 
@@ -140,14 +139,18 @@ object ViewObject {
     implicit val format = jsonFormat1(apply)
   }
 
-  sealed abstract class ResponseCode(val id : String) extends Enum[ResponseCode](id)
+  sealed abstract class ResponseCode(val id: String) extends Enum[ResponseCode](id)
 
   object ResponseCode extends EnumCompanion[ResponseCode] {
     case object OK200 extends ResponseCode("200")
+    case object ERROR400 extends ResponseCode("400")
     case object ERROR500 extends ResponseCode("500")
 
-    register(OK200,
-    ERROR500)
+    register(
+      OK200,
+      ERROR400,
+      ERROR500
+    )
   }
 
   case class PostResponse(code: ResponseCode, msg: String)

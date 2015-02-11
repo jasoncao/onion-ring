@@ -31,7 +31,7 @@ case class User(
   qq:          String,
   email:       String,
   photo:       String,
-  gender:      Gender = Gender.Male,
+  gender:      Gender  = Gender.Male,
   jobTitle:    String,
   description: String,
   score:       Int,

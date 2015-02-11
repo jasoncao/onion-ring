@@ -42,7 +42,7 @@ trait ReactiveMongoPersistence {
 
     implicit val bsonFormat: BSONFormat[M] = generateBSONFormat[M]
 
-    implicit val numberPerPage : Int = 10
+    implicit val numberPerPage: Int = 10
 
     private def findByIdQuery(id: ID) = BSONDocument("_id" -> idMapper.toBSON(id))
     private val emptyQuery = BSONDocument()
@@ -119,8 +119,8 @@ trait ReactiveMongoPersistence {
     /**
      *  add by Fan, for pagination
      */
-    def find[P](selector: BSONDocument = emptyQuery, pageNumber: Int)(implicit numberPerPage : Int, reads: RootJsonReader[P], ec: ExecutionContext) = {
-      collection.find(selector).options(QueryOpts((pageNumber - 1)* numberPerPage, numberPerPage)).cursor[P].collect[List](numberPerPage)
+    def find[P](selector: BSONDocument = emptyQuery, pageNumber: Int)(implicit numberPerPage: Int, reads: RootJsonReader[P], ec: ExecutionContext) = {
+      collection.find(selector).options(QueryOpts((pageNumber - 1) * numberPerPage, numberPerPage)).cursor[P].collect[List](numberPerPage)
     }
 
     protected def uncheckedRemoveById(id: ID)(implicit ec: ExecutionContext) = collection.uncheckedRemove(findByIdQuery(id))

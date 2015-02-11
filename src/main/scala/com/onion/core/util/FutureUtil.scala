@@ -33,17 +33,21 @@ class FutureIterableUtil[S](val future: Future[Iterable[S]]) {
 }
 
 class FutureOptionUtil[S](val future: Future[Option[S]]) {
-  def make[T](f: S => T): Future[T] = {
-    future.filter(_.isDefined).map {
-      case Some(s) => f(s)
+  def make[T](f: S => T): Future[Option[T]] = {
+    future.map {
+      case None    => None
+      case Some(s) => Option(f(s))
     }
   }
 
-  def then[T](f: S => Future[T]): Future[T] = {
-    future
-      .filter(_.isDefined)
-      .flatMap {
-      case Some(s) => f(s)
+  def then[T](f: S => Future[T]): Future[Option[T]] = {
+    future.flatMap {
+      case None    => Future(None)
+      case Some(s) => f(s).map(Option(_))
     }
+  }
+
+  def get[T >: S](default: T): Future[T] = {
+    future.map[T](_.getOrElse[T](default))
   }
 }

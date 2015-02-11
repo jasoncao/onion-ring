@@ -1,13 +1,13 @@
 package com.onion
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{ Actor, ActorLogging, Props }
 import akka.http.Http
 import akka.http.server._
 import akka.stream.scaladsl.ImplicitFlowMaterializer
 import akka.util.Timeout
 import com.onion.core.util.SprayJsonMarshalling
 import com.onion.view.ViewController._
-import com.onion.view.ViewObject.{PostMeeting, PutMeeting}
+import com.onion.view.ViewObject.{ PostMeeting, PutMeeting }
 import spray.json._
 
 import scala.concurrent.duration._
@@ -26,12 +26,12 @@ object HttpService {
 }
 
 class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
-  extends Actor
-  with ActorLogging
-  with Directives
-  with ImplicitFlowMaterializer
-  with SprayJsonMarshalling
-  with DefaultJsonProtocol {
+    extends Actor
+    with ActorLogging
+    with Directives
+    with ImplicitFlowMaterializer
+    with SprayJsonMarshalling
+    with DefaultJsonProtocol {
 
   import com.onion.HttpService._
   import context.dispatcher
@@ -65,13 +65,14 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
       pathPrefix("v1") {
         path("meetings") {
           pathEnd {
-            parameter("cityId" ? "0", "pageNum" ? 1) { (cityId, pageNum) => {
-              get {
-                complete {
-                  getMeetingsFromDB(cityId, pageNum)
+            parameter("cityId" ? "0", "pageNum" ? 1) { (cityId, pageNum) =>
+              {
+                get {
+                  complete {
+                    getMeetingsFromDB(cityId, pageNum)
+                  }
                 }
               }
-            }
             } ~
               put {
                 entity(as[PutMeeting]) { putMeeting =>
@@ -89,13 +90,13 @@ class HttpService(interface: String, port: Int)(implicit askTimeout: Timeout)
                   getMeetingDetailFromDB(meetingId)
                 }
               } ~
-              post {
-                entity(as[PostMeeting]) { postMeeting =>
-                  complete {
-                    ""
+                post {
+                  entity(as[PostMeeting]) { postMeeting =>
+                    complete {
+                      updateMeetingToDB(postMeeting.meeting)
+                    }
                   }
                 }
-              }
           }
       }
     }

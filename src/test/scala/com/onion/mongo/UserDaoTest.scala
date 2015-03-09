@@ -7,8 +7,8 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 /**
- * Created by famo on 1/28/15.
- */
+* Created by famo on 1/28/15.
+*/
 class UserDaoTest extends FunSuite {
   val user = User("id",
     "haha_city_id",
@@ -28,10 +28,10 @@ class UserDaoTest extends FunSuite {
 
   test("user dao test") {
     val userDao = DB.UserDao
-    val result = userDao.add(user)
-    Await.result(result, 100 days)
+//    val result = userDao.add(user)
+//    Await.result(result, 100 days)
 
-//    val result2 = userDao.findById("0")
-//    println(Await.result(result2, 100 days))
+    val result2 = userDao.findById("1423653410583-ba9fa68f-2671-4643-b1a1-ee9e7bd8d17f")
+    println(Await.result(result2, 100 days))
   }
 }

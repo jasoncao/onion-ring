@@ -1,18 +1,18 @@
 package com.onion.view
 
-import com.onion.core.util.enum.{ Enum, EnumCompanion }
 import com.onion.model._
 import com.onion.mongo.DB.UserDao
 import spray.json.DefaultJsonProtocol
+import sprest.util.enum.{EnumCompanion,Enum}
 
 import scala.concurrent.Future
+import com.onion.util.FutureUtil._
+import com.onion.util.OptionUtil._
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.onion.core.util.FutureUtil._
-import com.onion.core.util.OptionUtil._
 
 /**
- * Created by famo on 1/30/15.
- */
+* Created by famo on 1/30/15.
+*/
 object ViewObject {
 
   type UserDetail = User
@@ -118,9 +118,9 @@ object ViewObject {
 
     def fromModels(meetingFuture: Future[Option[Meeting]]) = {
       meetingFuture
-        .then(meeting => {
+        .to(meeting => {
           UserDao.findById(meeting.userId)
-            .then(seller => {
+            .to(seller => {
               meeting.comments.get.map(comment => {
                 UserDao.findById(comment.userId).make(user => {
                   CommentDetail.fromModel(comment, user)

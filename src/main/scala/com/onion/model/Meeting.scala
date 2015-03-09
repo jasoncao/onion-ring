@@ -1,11 +1,11 @@
 package com.onion.model
 
-import com.onion.core.models.Model
-import com.onion.core.Formats._
+import sprest.models.Model
+import sprest.Formats._
 
 /**
- * Created by famo on 1/27/15.
- */
+* Created by famo on 1/27/15.
+*/
 // don't need it now
 //sealed abstract class RegularType(val id: String, val label: String) extends Enum[RegularType](id)
 //

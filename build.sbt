@@ -1,30 +1,11 @@
-lazy val reactiveFlows = project.in(file("."))
+scalaVersion := "2.10.4"
 
-name := "onion-ring"
+resolvers += "sprest snapshots" at "http://sprest.io/releases"
 
-libraryDependencies ++= List(
-  Library.akkaContrib,
-  Library.akkaDataReplication,
-  Library.akkaHttp,
-  Library.akkaPersistenceMongo,
-  Library.akkaSlf4j,
-  Library.akkaSse,
-  Library.logbackClassic,
-  Library.sprayJson,
-  Library.reactiveMongo,
-  Library.akkaTestkit % "test",
-  Library.scalaTest % "test"
-)
+resolvers += "play" at "http://repo.typesafe.com/typesafe/releases/"
 
-resolvers ++= List(
-  Resolver.hseeberger,
-  Resolver.patriknw,
-  Resolver.sonatype,
-  Resolver.typesafe
-)
+libraryDependencies += "sprest" %% "sprest-core" % "0.3.8"
 
-initialCommands := """|import de.heikoseeberger.reactiveflows._""".stripMargin
+libraryDependencies += "sprest" %% "sprest-reactivemongo" % "0.3.8"
 
-addCommandAlias("rf1", "reStart -Dakka.remote.netty.tcp.port=2551 -Dakka.cluster.roles.0=reactive-flows -Dreactive-flows.http-service.port=9001")
-addCommandAlias("rf2", "run     -Dakka.remote.netty.tcp.port=2552 -Dakka.cluster.roles.0=reactive-flows -Dreactive-flows.http-service.port=9002")
-addCommandAlias("rf3", "run     -Dakka.remote.netty.tcp.port=2553 -Dakka.cluster.roles.0=reactive-flows -Dreactive-flows.http-service.port=9003")
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.3"

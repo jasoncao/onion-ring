@@ -5,11 +5,11 @@ import org.scalatest.FunSuite
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import com.onion.core.util.OptionUtil._
+import com.onion.util.OptionUtil._
 
 /**
- * Created by famo on 1/28/15.
- */
+* Created by famo on 1/28/15.
+*/
 class MeetingDaoTest extends FunSuite{
 
   val locations = List(Location("123","haha_name","haha_gps"))

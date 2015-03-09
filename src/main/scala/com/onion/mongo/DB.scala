@@ -1,16 +1,18 @@
 package com.onion.mongo
 
-import com.onion.core.models.{ UniqueSelector, Model }
-import com.onion.model.{ User, Meeting }
+import com.onion.model.{User, Meeting}
 import reactivemongo.bson.BSONDocument
-import scala.concurrent.{ Future, ExecutionContext }
+import spray.json.{RootJsonReader, RootJsonFormat}
+import sprest.models.{UniqueSelector, Model}
+import sprest.reactivemongo.ReactiveMongoPersistence
+import sprest.reactivemongo.typemappers.{NormalizedIdTransformer, SprayJsonTypeMapper}
+import scala.concurrent.{Future, ExecutionContext}
 import scala.concurrent.ExecutionContext.Implicits.global
-import spray.json.RootJsonFormat
-import com.onion.core.Formats._
-import com.onion.core.util.OptionUtil._
+import com.onion.util.OptionUtil._
+import sprest.Formats._
 
 /**
- * Created by famo on 1/27/15.
+ * Created by famo on 3/7/15.
  */
 object DB extends ReactiveMongoPersistence {
 
@@ -23,6 +25,7 @@ object DB extends ReactiveMongoPersistence {
   implicit object JsonTypeMapper extends SprayJsonTypeMapper with NormalizedIdTransformer
 
   abstract class UnsecuredDAO[M <: Model[String]](collName: String)(withNewId: M => M)(implicit jsformat: RootJsonFormat[M]) extends CollectionDAO[M, String](db(collName)) {
+    implicit val numberPerPage: Int = 10
 
     case class Selector(id: String) extends UniqueSelector[M, String]
 
@@ -33,6 +36,11 @@ object DB extends ReactiveMongoPersistence {
     override protected def updateImpl(m: M)(implicit ec: ExecutionContext) = doUpdate(m)
 
     override def remove(selector: Selector)(implicit ec: ExecutionContext) = uncheckedRemoveById(selector.id)
+
+    def find[P](selector: BSONDocument = BSONDocument(), pageNumber: Int)(implicit numberPerPage: Int, reads: RootJsonReader[P], ec: ExecutionContext, jsformat: RootJsonFormat[P]) = {
+      implicit val bsonFormat: BSONFormat[P] = generateBSONFormat[P]
+      collection.find(selector).options(QueryOpts((pageNumber - 1) * numberPerPage, numberPerPage)).cursor[P].collect[List](numberPerPage)
+    }
   }
 
   def newGuid = System.currentTimeMillis + "-" + java.util.UUID.randomUUID.toString
@@ -46,6 +54,7 @@ object DB extends ReactiveMongoPersistence {
   }
 
   object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(generateMeetingIds) {
+
     def findByCityId(cityId: String, pageNum: Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument("cityId" -> cityId), pageNum)
 
     def findByPage(pageNum: Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument(), pageNum)

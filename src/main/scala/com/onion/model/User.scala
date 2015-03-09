@@ -1,12 +1,12 @@
 package com.onion.model
 
-import com.onion.core.models.Model
-import com.onion.core.util.enum._
-import com.onion.core.Formats._
-
+import sprest.models.Model
+import sprest.util.enum.EnumCompanion
+import sprest.Formats._
+import sprest.util.enum.Enum
 /**
- * Created by famo on 1/28/15.
- */
+* Created by famo on 1/28/15.
+*/
 
 sealed abstract class Gender(val id: String, val label: String) extends Enum[Gender](id)
 

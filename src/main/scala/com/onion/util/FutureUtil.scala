@@ -1,6 +1,4 @@
-package com.onion.core.util
-
-import akka.actor.Status.Success
+package com.onion.util
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +38,7 @@ class FutureOptionUtil[S](val future: Future[Option[S]]) {
     }
   }
 
-  def then[T](f: S => Future[T]): Future[Option[T]] = {
+  def to[T](f: S => Future[T]): Future[Option[T]] = {
     future.flatMap {
       case None    => Future(None)
       case Some(s) => f(s).map(Option(_))

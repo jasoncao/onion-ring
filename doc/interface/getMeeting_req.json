@@ -2,8 +2,7 @@
   "header": {
   },
   "payload": {
-    "uid": 777,
-    "cityId": 1,
+    "token": 777,
     "meetingId": ""
   }
 }

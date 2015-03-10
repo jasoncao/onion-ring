@@ -2,7 +2,7 @@
   "header": {
   },
   "payload": {
-    "uid": 777,
+    "token": 777,
     "cityId": 1,
     "paging": {
       "offset": "",

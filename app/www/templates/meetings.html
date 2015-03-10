@@ -1,0 +1,28 @@
+<ion-view view-title="">
+  <ion-content>
+    <label class="item item-input item-select">
+      <div class="input-label">城市</div>
+      <select>
+        <option>北京</option>
+        <option selected>上海</option>
+        <option>南京</option>
+      </select>
+    </label>
+
+    <ion-list>
+      <ion-item class="item" ng-repeat="meeting in meetings" type="item-text-wrap" href="#/tab/meetings/{{meeting.id}}">
+
+        <div>
+          <h2>{{meeting.subject}}</h2>
+
+          <p><img ng-src="{{meeting.seller.icon}}" style="width: 16px; height: 16px"> {{meeting.seller.name}} ({{meeting.seller.title}})</p>
+
+          <p>{{meeting.description}})</p>
+
+          <p>$ {{meeting.price}}</p>
+        </div>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

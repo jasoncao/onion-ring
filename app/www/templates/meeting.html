@@ -1,0 +1,47 @@
+<ion-view view-title="">
+  <ion-nav-buttons side="right">
+    <button class="button button-clear button-positive" ng-click="bookMeeting()">预约</button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+    <div>
+      <h4>{{meeting.subject}}</h4>
+
+      <p><img ng-src="{{meeting.seller.icon}}" style="width: 16px; height: 16px"> {{meeting.seller.name}} ({{meeting.seller.title}})</p>
+
+      <p>{{meeting.description}}</p>
+
+      <p>价钱：${{meeting.price}}</p>
+
+      <p>时间：{{meeting.calender[0].fromTime}} - {{meeting.calender[0].toTime}}</p>
+
+      <p>地点：{{meeting.location[0].address}}</p>
+    </div>
+  </ion-content>
+</ion-view>
+
+<script id="templates/meeting-book-modal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar bar-header bar-positive">
+      <h1 class="title">预约</h1>
+      <button class="button button-clear button-primary" ng-click="modal.hide()">取消</button>
+    </ion-header-bar>
+
+    <ion-content class="padding">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">时间</span>
+          <input ng-model="newUser.firstName" type="text">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">地点</span>
+          <input ng-model="newUser.lastName" type="text">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">备注</span>
+          <input ng-model="newUser.email" type="text">
+        </label>
+        <button class="button button-full button-positive" ng-click="doBook(newUser)">确定</button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>

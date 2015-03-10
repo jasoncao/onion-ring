@@ -1,4 +1,25 @@
-angular.module('starter.services', ['ngResource'])
+'use strict';
+
+angular.module('onion.services', ['ngResource', 'http-auth-interceptor', 'restangular'])
+  .config(function (RestangularProvider) {
+    RestangularProvider.setBaseUrl('http://localhost:8080/api/v1');
+    RestangularProvider.setDefaultHttpFields({cache: true});
+
+    RestangularProvider.addResponseInterceptor(function (data, operation, what, url, response, deferred) {
+      if (operation === "getList") {
+        return data.meetings; //TODO: maybe need to unified the list for the sake of simplicity, as "list"
+      }
+      return data;
+    });
+  })
+  .factory('Meetings', function (Restangular) {
+    return Restangular.service('meetings');
+  })
+
+  
+  
+  
+  
 
   .factory('Chats', function () {
     // Might use a resource here that returns a JSON array
@@ -92,6 +113,77 @@ angular.module('starter.services', ['ngResource'])
     }
   })
 
-  .factory('MeetingFactory', function ($resource, SERVER_PATH) {
-    return $resource(SERVER_PATH + '/meetings/:meetingId');
-  });
+
+  //.factory('AuthenticationService', function ($rootScope, $http, authService, $httpBackend) {
+  //  return {
+  //    login: function (user) {
+  //      $http.post('https://login', {user: user}, {ignoreAuthModule: true})
+  //        .success(function (data, status, headers, config) {
+  //
+  //          $http.defaults.headers.common.Authorization = data.authorizationToken;  // Step 1
+  //
+  //          // Need to inform the http-auth-interceptor that
+  //          // the user has logged in successfully.  To do this, we pass in a function that
+  //          // will configure the request headers with the authorization token so
+  //          // previously failed requests(aka with status == 401) will be resent with the
+  //          // authorization token placed in the header
+  //          authService.loginConfirmed(data, function (config) {  // Step 2 & 3
+  //            config.headers.Authorization = data.authorizationToken;
+  //            return config;
+  //          });
+  //        })
+  //        .error(function (data, status, headers, config) {
+  //          $rootScope.$broadcast('event:auth-login-failed', status);
+  //        });
+  //    },
+  //    logout: function (user) {
+  //      $http.post('https://logout', {}, {ignoreAuthModule: true})
+  //        .finally(function (data) {
+  //          delete $http.defaults.headers.common.Authorization;
+  //          $rootScope.$broadcast('event:auth-logout-complete');
+  //        });
+  //    },
+  //    loginCancelled: function () {
+  //      authService.loginCancelled();
+  //    }
+  //  };
+  //})
+
+
+  //.factory('MeetingFactory', function ($resource, SERVER_PATH) {
+  //  return $resource(SERVER_PATH + '/meetings/:meetingId', {}, factoryActions);
+  //});
+
+//var factoryActions = {
+//  'get': {
+//    method: 'GET',
+//    headers: {
+//      'Accept': 'application/json'
+//    },
+//    responseType: 'json'
+//  },
+//  'save': {
+//    method: 'POST',
+//    headers: {
+//      'Accept': 'application/json',
+//      'Content-Type': 'application/json'
+//    },
+//    responseType: 'json'
+//  },
+//  'create': {
+//    method: 'PUT',
+//    headers: {
+//      'Accept': 'application/json',
+//      'Content-Type': 'application/json'
+//    },
+//    responseType: 'json'
+//  },
+//  'delete': {
+//    method: 'DELETE',
+//    headers: {
+//      'Accept': 'application/json',
+//      'Content-Type': 'application/json'
+//    },
+//    responseType: 'json'
+//  }
+//};

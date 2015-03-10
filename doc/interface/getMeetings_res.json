@@ -1,26 +1,20 @@
 {
-  "header": {
-  },
-  "payload": {
-    "paging": {
-      "offset": ""
-    },
-    "meetings": [
-      {
+  "meetings": [
+    {
+      "id": "",
+      "subject": "",
+      "target": "",
+      "description": "",
+      "price": "",
+      "createTime": "",
+      "updateTime": "",
+      "seller": {
         "id": "",
-        "subject": "",
-        "desc": "",
-        "price": "",
-        "createTime": "",
-        "updateTime": "",
-        "sellerUser": {
-          "id": "",
-          "name": "",
-          "title": "",
-          "icon": "",
-          "rating": ""
-        }
+        "name": "",
+        "title": "",
+        "icon": "",
+        "rating": ""
       }
-    ]
-  }
+    }
+  ]
 }

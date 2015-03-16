@@ -1,7 +1,7 @@
 package com.onion.service
 
 import akka.actor.Actor
-import com.onion.view.ViewObject.{PostMeeting, PutMeeting}
+import com.onion.view.ViewObject.{PutBook, PostMeeting, PutMeeting}
 import spray.httpx.SprayJsonSupport
 import spray.routing.{Route, HttpService}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -52,7 +52,23 @@ trait MyService extends HttpService with SprayJsonSupport {
                       updateMeetingToDB(postMeeting.meeting)
                     }
                   }
+                } ~
+                delete {
+                  complete {
+                    deleteMeetingToDB(meetingId)
+                  }
                 }
+//              path("actions") {
+//                path("book"){
+//                  put {
+//                    entity(as[PutBook]) { putBook =>
+//                      complete {
+//
+//                      }
+//                    }
+//                  }
+//                }
+//              }
           }
       }
     }

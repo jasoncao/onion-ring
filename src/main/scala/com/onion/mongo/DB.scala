@@ -46,18 +46,15 @@ object DB extends ReactiveMongoPersistence {
   def newGuid = System.currentTimeMillis + "-" + java.util.UUID.randomUUID.toString
 
   def generateMeetingIds(meeting: Meeting): Meeting = {
-    val _locations = meeting.locations.getOrElse(List()).map(_.copy(id = newGuid))
-    val _calenders = meeting.calenders.getOrElse(List()).map(_.copy(id = newGuid))
+    val _selection = meeting.selection.getOrElse(List()).map(_.copy(id = newGuid))
     val _comments = meeting.comments.getOrElse(List()).map(_.copy(id = newGuid))
     val _createTime = meeting.createTime.getOrElse(System.currentTimeMillis())
-    meeting.copy(id = newGuid, locations = _locations, calenders = _calenders, comments = _comments, createTime = _createTime, updateTime = System.currentTimeMillis())
+    meeting.copy(id = newGuid, selection = _selection, comments = _comments, createTime = _createTime, updateTime = System.currentTimeMillis())
   }
 
   object MeetingDao extends UnsecuredDAO[Meeting]("meeting")(generateMeetingIds) {
 
-    def findByCityId(cityId: String, pageNum: Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument("cityId" -> cityId), pageNum)
-
-    def findByPage(pageNum: Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument(), pageNum)
+    def findByCityId(cityId: String, pageNum: Int = 1): Future[List[Meeting]] = find[Meeting](BSONDocument("cityId" -> cityId, "isDeleted" -> false), pageNum)
   }
 
   object UserDao extends UnsecuredDAO[User]("user")(_.copy(id = newGuid))

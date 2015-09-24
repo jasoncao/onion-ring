@@ -1,6 +1,8 @@
 <ion-view view-title="">
   <ion-nav-buttons side="right">
-    <button class="button button-clear button-positive" ng-click="bookMeeting()">预约</button>
+    <!--<button class="button button-clear button-positive" ng-click="bookMeeting(meeting.id)">预约</button>-->
+    <a class="button" ui-sref="tab.meeting.book">预约</a>
+    
   </ion-nav-buttons>
   <ion-content class="padding">
     <div>
@@ -12,36 +14,34 @@
 
       <p>价钱：${{meeting.price}}</p>
 
-      <p>时间：{{meeting.calender[0].fromTime}} - {{meeting.calender[0].toTime}}</p>
+      <p>时间：{{meeting.selection[0].time}} - {{meeting.selection[0].duration}}</p>
 
-      <p>地点：{{meeting.location[0].address}}</p>
+      <p>地点：{{meeting.selection[0].address}} - {{meeting.selection[0].gps}}</p>
     </div>
   </ion-content>
 </ion-view>
 
-<script id="templates/meeting-book-modal.html" type="text/ng-template">
-  <ion-modal-view>
-    <ion-header-bar class="bar bar-header bar-positive">
-      <h1 class="title">预约</h1>
-      <button class="button button-clear button-primary" ng-click="modal.hide()">取消</button>
-    </ion-header-bar>
+//https://github.com/rensanning/ToDo-ionic
+//https://github.com/driftyco/ionic-weather
 
-    <ion-content class="padding">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">时间</span>
-          <input ng-model="newUser.firstName" type="text">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">地点</span>
-          <input ng-model="newUser.lastName" type="text">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">备注</span>
-          <input ng-model="newUser.email" type="text">
-        </label>
-        <button class="button button-full button-positive" ng-click="doBook(newUser)">确定</button>
-      </div>
-    </ion-content>
-  </ion-modal-view>
-</script>
+<!--<script id="templates/meeting-book-modal.html" type="text/ng-template">-->
+  <!--<ion-modal-view>-->
+    <!--<ion-header-bar class="bar bar-header bar-positive">-->
+      <!--<h1 class="title">预约</h1>-->
+      <!--<button class="button button-clear button-primary" ng-click="modal.hide()">取消</button>-->
+    <!--</ion-header-bar>-->
+    <!--<ion-content>-->
+      <!--<div class="list">-->
+        <!--<label class="item item-input item-select">-->
+          <!--<div class="input-label">时间/地点</div>-->
+          <!--<select ng-model="data.selectionId" ng-options="item.id as item.value for item in meeting.selection"></select>-->
+        <!--</label>-->
+        <!--<label class="item item-input">-->
+          <!--<div class="input-label">备注</div>-->
+          <!--<textarea placeholder="备注"></textarea>-->
+        <!--</label>-->
+        <!--<button class="button button-full button-positive" ng-click="doBook(newUser)">确定</button>-->
+      <!--</div>-->
+    <!--</ion-content>-->
+  <!--</ion-modal-view>-->
+<!--</script>-->

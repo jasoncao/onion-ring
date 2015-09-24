@@ -106,6 +106,13 @@ var meeting = [
           "duration": "2",
           "address": "三里屯",
           "gps": "123123"
+        },
+        {
+          "id": 1,
+          "time": "2015/02/03 20:00",
+          "duration": "4",
+          "address": "后海",
+          "gps": "345345"
         }
       ],
       "comments": [
@@ -144,6 +151,13 @@ var meeting = [
           "duration": "2",
           "address": "三里屯",
           "gps": "123123"
+        },
+        {
+          "id": 1,
+          "time": "2015/02/03 20:00",
+          "duration": "4",
+          "address": "后海",
+          "gps": "345345"
         }
       ],
       "comments": [

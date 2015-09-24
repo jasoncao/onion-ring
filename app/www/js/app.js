@@ -73,6 +73,15 @@ angular.module('onion', ['ionic', 'onion.controllers', 'onion.services', 'onion.
           }
         }
       })
+      .state('tab.meeting.book', {
+        url: '/meetings/:meetingId/actions/book',
+        views: {
+          'tab-meeting': {
+            templateUrl: 'templates/meeting-book.html',
+            controller: 'MeetingBookCtrl'
+          }
+        }
+      })
 
       
       

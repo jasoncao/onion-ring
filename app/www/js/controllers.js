@@ -7,53 +7,93 @@ angular.module('onion.controllers', [])
       $scope.meetings = list;
     });
   })
-  .controller('MeetingCtrl', function ($scope, $stateParams, $ionicModal, Meetings) {
+  .controller('MeetingCtrl', function ($scope, $stateParams, $state, $ionicModal, Meetings) {
     Meetings.one($stateParams.meetingId).get().then(function (one) {
       //console.log('meetings 222222', one.meeting);
       $scope.meeting = one.meeting;
+      for (var i = 0; i < $scope.meeting.selection.length; i++) {
+        $scope.meeting.selection[i].value = $scope.meeting.selection[i].time + ' ' + $scope.meeting.selection[i].duration + ' ' + $scope.meeting.selection[i].address + ' ' + $scope.meeting.selection[i].gps;
+      }
     });
 
     $scope.bookMeeting = function() {
-      $scope.hashtagValue = 'blackandwhitephotography'; // if selected, it'll display this value
+      $state.go('tab.meeting.book');
 
-      $ionicModal.fromTemplateUrl('templates/meeting-book-modal.html', {
-        scope: $scope,
-        animation: 'slide-in-up'
-      }).then(function(modal) {
-        $scope.modal = modal;
-        $scope.modal.show();
-      });
+      console.log('bookMeeting 222222', $stateParams.meetingId);
     };
-    $scope.openModal = function() {
-      $scope.modal.show();
-    };
-    $scope.closeModal = function() {
-      $scope.modal.hide();
-    };
-    $scope.$on('$destroy', function() {
-      $scope.modal.remove();
-    });
-    $scope.$on('modal.hidden', function() {
-      // Execute action
-      console.log('modal hidden');
-    });
-    $scope.$on('modal.removed', function() {
-      // Execute action
-      console.log('modal removed');
-    });
-    $scope.doBook = function(u) {
-      //$scope.bookmeeting.meetingId = $stateParams.meetingId;
-      //$scope.bookmeeting.calenderId = $stateParams.meetingId;
-      //$scope.bookmeeting.locationId = $stateParams.meetingId;
-      //$scope.bookmeeting.memo = $stateParams.meetingId;
-      //
-      //Meetings.put()
-      
-      $scope.contacts.push({ name: u.firstName + ' ' + u.lastName });
-      $scope.modal.hide();
-    };
+    
+    
+    
+    
+    //$scope.bookMeeting = function() {
+    //  //$scope.hashtagValue = 'blackandwhitephotography'; // if selected, it'll display this value
+    //
+    //  $ionicModal.fromTemplateUrl('templates/meeting-book-modal.html', {
+    //    scope: $scope,
+    //    animation: 'slide-in-up'
+    //  }).then(function(modal) {
+    //    $scope.modal = modal;
+    //    $scope.modal.show();
+    //  });
+    //};
+    //$scope.bookMeeting = function() {
+    //  $scope.hashtagValue = 'blackandwhitephotography'; // if selected, it'll display this value
+    //
+    //  $ionicModal.fromTemplateUrl('templates/meeting-book-modal.html', {
+    //    scope: $scope,
+    //    animation: 'slide-in-up'
+    //  }).then(function(modal) {
+    //    $scope.modal = modal;
+    //    $scope.modal.show();
+    //  });
+    //};
+    //$scope.openModal = function() {
+    //  $scope.modal.show();
+    //};
+    //$scope.closeModal = function() {
+    //  $scope.modal.hide();
+    //};
+    //$scope.$on('$destroy', function() {
+    //  $scope.modal.remove();
+    //});
+    //$scope.$on('modal.hidden', function() {
+    //  // Execute action
+    //  console.log('modal hidden');
+    //});
+    //$scope.$on('modal.removed', function() {
+    //  // Execute action
+    //  console.log('modal removed');
+    //});
+    //$scope.doBook = function(u) {
+    //  //$scope.bookmeeting.meetingId = $stateParams.meetingId;
+    //  //$scope.bookmeeting.calenderId = $stateParams.meetingId;
+    //  //$scope.bookmeeting.locationId = $stateParams.meetingId;
+    //  //$scope.bookmeeting.memo = $stateParams.meetingId;
+    //  //
+    //  //Meetings.put()
+    //  
+    //  $scope.contacts.push({ name: u.firstName + ' ' + u.lastName });
+    //  $scope.modal.hide();
+    //};
+    //
+    //$scope.data = {
+    //  meetingId: $stateParams.meetingId,
+    //  selectionId: '0',
+    //  memo: ''
+    //};
   })
 
+
+
+  .controller('MeetingBookCtrl', function ($scope, $stateParams) {
+
+    console.log('MeetingBookCtrl 111111111111111111', $stateParams.meetingId);
+
+    //$scope.meetings = list;
+  })
+  
+  
+  
 
   //.controller('MeetingsCtrl', function ($scope, MeetingFactory) {
   //  var result = MeetingFactory.get({cityId: 1, token: '777'}, function () {

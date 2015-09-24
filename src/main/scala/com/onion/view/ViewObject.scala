@@ -3,7 +3,7 @@ package com.onion.view
 import com.onion.model._
 import com.onion.mongo.DB.UserDao
 import spray.json.DefaultJsonProtocol
-import sprest.util.enum.{EnumCompanion,Enum}
+import sprest.util.enum.{EnumCompanion, Enum}
 
 import scala.concurrent.Future
 import com.onion.util.FutureUtil._
@@ -11,15 +11,11 @@ import com.onion.util.OptionUtil._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
-* Created by famo on 1/30/15.
-*/
+ * Created by famo on 1/30/15.
+ */
 object ViewObject {
 
   type UserDetail = User
-
-  type CalenderDetail = Calender
-
-  type LocationDetail = Location
 
   case class UserAbstraction(id: Option[String], name: Option[String], title: Option[String], icon: Option[String], rating: Option[Int])
 
@@ -33,7 +29,7 @@ object ViewObject {
   object MeetingAbstraction extends DefaultJsonProtocol {
     implicit val format = jsonFormat8(apply)
 
-    implicit def fromModel(meeting: Meeting, user: User): MeetingAbstraction = {
+    def fromModel(meeting: Meeting, user: User): MeetingAbstraction = {
       MeetingAbstraction(meeting.id, meeting.subject, meeting.target, meeting.description, meeting.price,
         meeting.createTime, meeting.updateTime,
         UserAbstraction(user.id, user.name, user.jobTitle, user.photo, user.score))
@@ -83,7 +79,7 @@ object ViewObject {
 
   case class MeetingDetail(id: Option[String], cityId: Option[String], subject: Option[String], target: Option[String],
                            description: Option[String], price: Option[Double], createTime: Option[Long], updateTime: Option[Long],
-                           seller: Option[UserAbstraction], calenders: Option[List[CalenderDetail]], locations: Option[List[LocationDetail]], comments: Option[List[CommentDetail]]) {
+                           seller: Option[UserAbstraction], selection: Option[List[Selection]], comments: Option[List[CommentDetail]]) {
     def toMeeting: Meeting =
       Meeting(
         id,
@@ -93,8 +89,7 @@ object ViewObject {
         description,
         target,
         price,
-        calenders,
-        locations,
+        selection,
         comments.getOrElse(List()).map(_.toComment),
         createTime,
         updateTime,
@@ -103,11 +98,11 @@ object ViewObject {
   }
 
   object MeetingDetail extends DefaultJsonProtocol {
-    implicit val format = jsonFormat12(apply)
+    implicit val format = jsonFormat11(apply)
 
     def fromModels(meeting: Meeting, seller: User, comments: List[CommentDetail]) = {
       MeetingDetail(meeting.id, meeting.cityId, meeting.subject, meeting.target, meeting.description, meeting.price, meeting.createTime, meeting.updateTime,
-        UserAbstraction(seller.id, seller.name, seller.jobTitle, seller.photo, seller.score), meeting.calenders, meeting.locations, comments)
+        UserAbstraction(seller.id, seller.name, seller.jobTitle, seller.photo, seller.score), meeting.selection, comments)
     }
   }
 
@@ -116,11 +111,11 @@ object ViewObject {
   object MeetingResponse extends DefaultJsonProtocol {
     implicit val format = jsonFormat1(apply)
 
-    def fromModels(meetingFuture: Future[Option[Meeting]]) = {
-      meetingFuture
-        .to(meeting => {
-          UserDao.findById(meeting.userId)
-            .to(seller => {
+        def fromModels(meetingFuture: Future[Option[Meeting]]) = {
+          meetingFuture
+            .to(meeting => {
+            UserDao.findById(meeting.userId)
+              .to(seller => {
               meeting.comments.get.map(comment => {
                 UserDao.findById(comment.userId).make(user => {
                   CommentDetail.fromModel(comment, user)
@@ -129,8 +124,8 @@ object ViewObject {
                 MeetingDetail.fromModels(meeting, seller, comments.asInstanceOf[List[CommentDetail]])
               })
             })
-        }).map(MeetingResponse(_))
-    }
+          }).map(MeetingResponse(_))
+        }
   }
 
   case class PutMeeting(meeting: Option[MeetingDetail])
@@ -142,8 +137,11 @@ object ViewObject {
   sealed abstract class ResponseCode(val id: String) extends Enum[ResponseCode](id)
 
   object ResponseCode extends EnumCompanion[ResponseCode] {
+
     case object OK200 extends ResponseCode("200")
+
     case object ERROR400 extends ResponseCode("400")
+
     case object ERROR500 extends ResponseCode("500")
 
     register(
@@ -163,6 +161,12 @@ object ViewObject {
 
   object PostMeeting extends DefaultJsonProtocol {
     implicit val format = jsonFormat1(apply)
+  }
+
+  case class PutBook(meetingId: String, selectionId : String, memo: String)
+
+  object PutBook extends DefaultJsonProtocol {
+    implicit val format = jsonFormat3(apply)
   }
 
 }

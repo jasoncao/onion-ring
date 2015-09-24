@@ -32,24 +32,16 @@ object Comment {
   implicit val reminderJsonFormat = jsonFormat4(apply)
 }
 
-case class Calender(
-  id:       Option[String],
-  fromTime: Option[Long],
-  toTime:   Option[Long]
+case class Selection(
+  id:          Option[String],
+  time:        Option[Long],
+  duration:    Option[Long],
+  address:     Option[String],
+  gps:         Option[String]
 )
 
-object Calender {
-  implicit val reminderJsonFormat = jsonFormat3(apply)
-}
-
-case class Location(
-  id:   Option[String],
-  name: Option[String],
-  gps:  Option[String]
-)
-
-object Location {
-  implicit val reminderJsonFormat = jsonFormat3(apply)
+object Selection{
+  implicit val reminderJsonFormat = jsonFormat5(apply)
 }
 
 case class Meeting(
@@ -60,8 +52,7 @@ case class Meeting(
   description: Option[String],
   target:      Option[String],
   price:       Option[Double],
-  calenders:   Option[List[Calender]],
-  locations:   Option[List[Location]],
+  selection:   Option[List[Selection]],
   comments:    Option[List[Comment]],
   createTime:  Option[Long],
   updateTime:  Option[Long],
@@ -69,5 +60,5 @@ case class Meeting(
 ) extends Model[String]
 
 object Meeting {
-  implicit val reminderJsonFormat = jsonFormat13(apply)
+  implicit val reminderJsonFormat = jsonFormat12(apply)
 }

@@ -42,16 +42,14 @@ object ViewController {
       val postResponse = Promise[PostResponse]()
       val _meeting = meeting.map {
         (m: Meeting) =>
-          val _locations = m.locations.getOrElse(List()).map(_.copy(id = newGuid))
-          val _calenders = m.calenders.getOrElse(List()).map(_.copy(id = newGuid))
+          val _selection = m.selection.getOrElse(List()).map(_.copy(id = newGuid))
           orginMeeting.copy(
             cityId = m.cityId,
             subject = m.subject,
             target = m.target,
             description = m.description,
             price = m.price,
-            locations = _locations,
-            calenders = _calenders,
+            selection = _selection,
             updateTime = System.currentTimeMillis
           )
       }
@@ -66,6 +64,24 @@ object ViewController {
       }
       postResponse.future
     }).get(PostResponse(ERROR400, "can't find meeting by id"))
+
+  }
+
+  def deleteMeetingToDB(id: String) : Future[PostResponse] = {
+    MeetingDao.findById(id)
+      .to(orginMeeting => {
+      val postResponse = Promise[PostResponse]()
+      val _meeting = orginMeeting.copy(updateTime = System.currentTimeMillis(), isDeleted = true)
+      MeetingDao.update(_meeting).onComplete {
+        case Success(_) => postResponse success PostResponse(OK200, "success")
+        case Failure(t) => postResponse success PostResponse(ERROR500, t.getMessage)
+          println(t)
+      }
+      postResponse.future
+    }).get(PostResponse(ERROR400,"can't find meeting by id"))
+  }
+
+  def putBookToDB(putBook: PutBook) = {
 
   }
 }
